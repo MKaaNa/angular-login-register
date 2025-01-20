@@ -10,41 +10,40 @@ import { Router } from '@angular/router';  // Router'ı import et
 })
 export class LoginComponent implements OnInit {
 
-  formdata = { email: "", password: "" };
-  submit = false;
-  loading = false;
-  errorMessage = "";
-  http: HttpClient;  // Define HttpClient
+  formdata = { email: "", password: "" };  // Form verilerini saklamak için kullanılan obje
+  submit = false;  // Formun gönderilip gönderilmediğini takip eder
+  loading = false;  // Yükleniyor durumu
+  errorMessage = "";  // Hata mesajı
+  http: HttpClient;  // HttpClient'i tanımladık
 
-  // Router'ı constructor'a ekle
-  constructor(private auth: AuthService, httpClient: HttpClient, private router: Router) {
-    this.http = httpClient; // Initialize HttpClient
+  // Constructor'da HttpClient ve Router'ı inject ediyoruz
+  constructor(private auth: AuthService, private httpClient: HttpClient, private router: Router) {
+    this.http = httpClient; // HttpClient'i başlatıyoruz
   }
 
   ngOnInit(): void {
-    this.auth.canAuthenticate();
+    this.auth.canAuthenticate();  // Kullanıcının giriş yapıp yapmadığını kontrol etme
   }
 
-onSubmit() {
-    this.loading = true;
-    this.http.post('http://localhost:8080/api/login', this.formdata)
+  // OnSubmit fonksiyonu: Login işlemi
+  onSubmit() {
+    this.loading = true;  // Yükleniyor durumunu başlat
+    this.http.post('http://localhost:8080/api/login', this.formdata)  // Login isteğini gönderiyoruz
       .subscribe(
         (response: any) => {
-          this.loading = false;
+          this.loading = false;  // Yükleniyor durumunu sonlandır
           // JWT token'ı localStorage'a kaydediyoruz
           if (response.token) {
-            localStorage.setItem('token', response.token);
-            console.log('Login successful:', response);
-            this.router.navigate(['/dashboard']); // Yönlendirme
+            localStorage.setItem('token', response.token);  // Token'ı localStorage'a kaydediyoruz
+            console.log('Login successful:', response);  // Başarılı giriş mesajı
+            this.router.navigate(['/dashboard']);  // Kullanıcıyı dashboard'a yönlendiriyoruz
           }
         },
         (error) => {
-          this.loading = false;
-          console.error('Error during login:', error);
-          this.errorMessage = error?.error?.message || 'An unknown error occurred. Please try again.';
+          this.loading = false;  // Yükleniyor durumunu sonlandır
+          console.error('Error during login:', error);  // Hata mesajını konsola yazdırıyoruz
+          this.errorMessage = error?.error?.message || 'An unknown error occurred. Please try again.';  // Hata mesajını kullanıcıya gösteriyoruz
         }
       );
-}
-
-
+  }
 }

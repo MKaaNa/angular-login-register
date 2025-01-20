@@ -1,0 +1,30 @@
+<div class="container">
+    <h3>Search Rooms</h3>
+    <div class="row">
+        <div class="col">
+            <input [(ngModel)]="minPrice" type="number" placeholder="Min Price" class="form-control" />
+        </div>
+        <div class="col">
+            <input [(ngModel)]="maxPrice" type="number" placeholder="Max Price" class="form-control" />
+        </div>
+        <div class="col">
+            <input [(ngModel)]="roomType" type="text" placeholder="Room Type" class="form-control" />
+        </div>
+        <div class="col">
+            <button (click)="onSearch()" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div *ngFor="let room of rooms" class="col-4">
+            <div class="card">
+                <img [src]="room.roomImage" class="card-img-top" alt="Room Image" />
+                <div class="card-body">
+                    <h5 class="card-title">{{ room.roomType }}</h5>
+                    <p class="card-text">Price: {{ room.pricePerNight | currency }}</p>
+                    <p class="card-text">Beds: {{ room.bedCount }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<div>
+    <label for="roomType">Room Type:</label>
+    <select id="roomType" [(ngModel)]="selectedRoomType" name="roomType">
+        <option value="single">Single</option>
+        <option value="double">Double</option>
+        <option value="suite">Suite</option>
+    </select>
+</div>
+
+<div>
+    <label for="guestCount">Number of Guests:</label>
+    <select id="guestCount" [(ngModel)]="selectedGuestCount" name="guestCount">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+    </select>
+</div>
+
+<div>
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" [(ngModel)]="startDate" name="startDate">
+</div>
+
+<div>
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" [(ngModel)]="endDate" name="endDate">
+</div>
+
+<button (click)="getAvailableRooms()">Show Available Rooms</button>
+
+<div *ngIf="rooms.length > 0">
+    <ul>
+        <li *ngFor="let room of rooms">
+            Room ID: {{ room.id }}, Type: {{ room.type }}, Price: {{ room.price }}
+        </li>
+    </ul>
+</div>
+
+<div *ngIf="rooms.length === 0">
+    No rooms available.
+</div>

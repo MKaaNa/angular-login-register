@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4" *ngFor="let room of rooms">
+            <div class="card">
+                <img [src]="room.roomImage" class="card-img-top" alt="Room image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ room.roomType }}</h5>
+                    <p class="card-text">Price per night: ${{ room.pricePerNight }}</p>
+                    <p class="card-text">Beds: {{ room.bedCount }}</p>
+                    <!-- Button to navigate to the reservation page -->
+                    <a [routerLink]="['/reservation', room.id]" class="btn btn-primary">Reserve</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

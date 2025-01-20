@@ -1,0 +1,84 @@
+/* Genel Konteyner Stili */
+.container {
+  margin-top: 30px;
+  padding: 20px;
+}
+
+/* Başlık Stili */
+h3 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+/* Arama Formu Stili */
+.row {
+  margin-bottom: 15px;
+}
+
+/* Arama butonunun stilleri */
+button {
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Oda kartlarının stilini düzenle */
+.card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+}
+
+/* Oda resmi stilini ayarla */
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Card başlık ve içerik stilini ayarla */
+.card-body {
+  padding: 15px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Mobil uyumluluk için */
+@media (max-width: 767px) {
+  .card {
+    margin-bottom: 15px;
+  }
+
+  .col-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .card-body {
+    padding: 10px;
+  }
+}
