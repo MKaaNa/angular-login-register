@@ -3,7 +3,7 @@
   <div class="container">
     <div class="text-center mt-5">
       <h3>Dashboard page</h3>
-      <p class="text-bold " [innerText]="'Hi '+this.user.displayName+', your Firebase ID is '+this.user.localId" ></p>
+      <p class="text-bold" [innerText]="'Hi ' + (user?.name || 'User')"></p> <!-- name'i kullanıyoruz -->
     </div>
   </div>
 </main>

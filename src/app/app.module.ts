@@ -9,14 +9,15 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule} from '@angular/common/http'
+import { HttpClientModule} from '@angular/common/http';
 
-const routes:Routes = [
-  {path:'',component:HomeComponent },
-  {path:'register',component:RegisterComponent},
-  {path:'login',component:LoginComponent},
-  {path:'dashboard',component:DashboardComponent}
-]
+// Yönlendirme ayarları
+const routes: Routes = [
+  { path: '', component: HomeComponent },         // Ana sayfa rotası
+  { path: 'register', component: RegisterComponent }, // Kayıt sayfası
+  { path: 'login', component: LoginComponent },     // Giriş sayfası
+  { path: 'dashboard', component: DashboardComponent }  // Dashboard sayfası
+];
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ const routes:Routes = [
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes),  // Yönlendirmeleri burada tanımlıyoruz
     FormsModule,
     HttpClientModule
   ],
