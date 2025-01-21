@@ -27,12 +27,13 @@
     <input type="date" id="endDate" [(ngModel)]="endDate" name="endDate">
 </div>
 
-<button (click)="getAvailableRooms()">Show Available Rooms</button>
+<button (click)="getAvailableRooms(selectedRoomType, selectedGuestCount, startDate, endDate)">Show Available
+    Rooms</button>
 
 <div *ngIf="rooms.length > 0">
     <ul>
         <li *ngFor="let room of rooms">
-            Room ID: {{ room.id }}, Type: {{ room.type }}, Price: {{ room.price }}
+            Room ID: {{ room.id }}, Type: {{ room.roomType | titlecase }}, Price: {{ room.price }}
         </li>
     </ul>
 </div>

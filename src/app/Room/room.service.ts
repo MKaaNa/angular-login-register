@@ -1,18 +1,25 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoomService {
+  getRooms(selectedRoomType: string, selectedGuestCount: number, startDate: string, endDate: string) {
+    throw new Error('Method not implemented.');
+  }
   private apiUrl = 'http://localhost:8080/rooms';  // Güncellenmiş API URL'si
 
   constructor(private http: HttpClient) {}
 
-  getAvailableRooms(roomType: string, guestCount: number, startDate: string, endDate: string): Observable<any[]> {
-    const url = `${this.apiUrl}?roomType=${roomType}&guestCount=${guestCount}&startDate=${startDate}&endDate=${endDate}`;
-    return this.http.get<any[]>(url);
+  getAvailableRooms(roomType: string, guestCount: number, startDate: string, endDate: string) {
+    let params = new HttpParams()
+    .set('roomType', roomType)
+    .set('guestCount', guestCount.toString())
+    .set('startDate', startDate)
+        .set('endDate', endDate);
+      return this.http.get<any[]>(this.apiUrl, { params });
   }
 
   getRoomById(roomId: number): Observable<any> {
