@@ -35,6 +35,102 @@ input, select {
   box-sizing: border-box;
 }
 
+/* Image slider */
+.image-slider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.slider-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 30px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.left {
+  left: 10px;
+}
+
+.right {
+  right: 10px;
+}
+
+.slider-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Popup Modal: Odaların detayları */
+.popup-room-image {
+  width: 100%;
+  height: auto;
+  margin: 20px 0;
+  border-radius: 5px;
+}
+
+/* Popup Modal: Odalar bulunamazsa gösterilecek baloncuk şeklinde popup */
+.popup {
+  position: fixed;
+  top: 10%;  /* Ekranın üst kısmına biraz uzak */
+  left: 50%;  /* Ekranın tam ortasında olabilmesi için */
+  transform: translateX(-50%);  /* Tam ortalamak için */
+  background-color: rgba(0, 0, 0, 0.8); /* Yarı saydam arka plan */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  width: 300px;  /* Baloncuk şeklinde daha küçük bir popup */
+  padding: 20px;
+  border-radius: 15px;  /* Yuvarlatılmış köşeler */
+  opacity: 0;
+  animation: popupAnim 0.5s forwards; /* Animasyon ekleniyor */
+}
+
+/* Animasyon */
+@keyframes popupAnim {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5); /* Başlangıçta küçülmüş ve görünmez */
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1); /* Son durumda normal boyut ve görünür */
+  }
+}
+
+/* Popup içeriği */
+.popup-content {
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+/* Kapanma butonunu küçük yapalım */
+.popup-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+.popup-close:hover {
+  color: #e74c3c;  /* Hoverda kırmızıya dönsün */
+}
+
 /* Buton stilini modernleştir */
 button {
   background-color: #4CAF50; /* Yeşil arka plan */

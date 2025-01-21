@@ -8,44 +8,79 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./reservation.component.css'],
 })
 export class ReservationComponent implements OnInit {
-  selectedRoomType: string = '';  // Oda tipi
-  selectedGuestCount: number = 1;  // Konuk sayısı
-  startDate: string = '';  // Başlangıç tarihi
-  endDate: string = '';    // Bitiş tarihi
-  rooms: any[] = [];  // Odaların listesi
-  roomsChecked: boolean = false;  // Odalar arandı mı?
-  errorMessage: string = '';  // Hata mesajı
+  selectedRoomType: string = '';  
+  selectedGuestCount: number = 1;  
+  startDate: string = '';  
+  endDate: string = '';    
+  rooms: any[] = [];  
+  roomsChecked: boolean = false;  
+  showNoRoomsPopup: boolean = false;  
+  selectedRoomDetails: any = null;  
+  showRoomDetailsPopup: boolean = false;
+  imageIndex: number = 0;  
+  errorMessage: string = '';  
 
-  constructor(private roomService: RoomService, private http: HttpClient) {}
+  constructor(private roomService: RoomService, private http: HttpClient) { }
 
-  ngOnInit(): void {
-    // Component yüklendiğinde yapılacak işlemler
-  }
+  ngOnInit(): void {}
 
-  // Odaları alırken API'yi çağırıyoruz
   getAvailableRooms(roomType: string, guestCount: number, startDate: string, endDate: string): void {
-    this.roomsChecked = true;  // Odalar arandı
-
     this.roomService.getAvailableRooms(roomType, guestCount, startDate, endDate)
       .subscribe(
         rooms => {
           this.rooms = rooms;
           if (rooms.length === 0) {
-            this.errorMessage = 'No rooms available for the selected criteria.';
+            this.showNoRoomsPopup = true;
           } else {
-            this.errorMessage = ''; // Odalar bulunduysa hata mesajını temizle
+            this.showNoRoomsPopup = false;
           }
         },
         error => {
           console.error('Error fetching available rooms', error);
-          this.errorMessage = 'An error occurred while fetching the rooms.';
+          this.showNoRoomsPopup = true;
         }
       );
   }
 
-  // Oda hakkında daha fazla bilgi göster
-  showRoomDetails(roomId: number): void {
-    // Burada oda hakkında detayları gösterecek işlemleri yazabilirsiniz
-    console.log('Room details for room ID:', roomId);
+  showRoomDetails(room: any): void {
+    // Burada odanın detaylarını seçiyoruz
+    this.selectedRoomDetails = room;
+
+    // RoomType'a göre resim ve açıklamaları belirliyoruz
+    if (this.selectedRoomDetails.roomType === 'single') {
+      this.selectedRoomDetails.images = ['si1.jpg', 'si2.jpg', 'si3.jpg'];
+      this.selectedRoomDetails.description = 'Tek kişilik, misafirlerimiz için kompakt ve sade bir oda.';
+    } else if (this.selectedRoomDetails.roomType === 'double') {
+      this.selectedRoomDetails.images = ['d1.jpg', 'd2.jpg', 'd3.jpg'];
+      this.selectedRoomDetails.description = 'İki veya daha fazla sayıda misafirlerimize önermiş olduğumuz lüks ve şık olan bir oda.';
+    } else if (this.selectedRoomDetails.roomType === 'suite') {
+      this.selectedRoomDetails.images = ['s1.jpg', 's2.jpg', 's3.jpg'];
+      this.selectedRoomDetails.description = 'Çiftlerimize özel kral dairesi lükslüğünü aratmayan ve komfordan ödün vermeyen bir oda.';
+    }
+
+    // Eğer selectedRoomDetails'te images varsa, resimlerin olduğuna emin olalım
+    if (this.selectedRoomDetails?.images?.length > 0) {
+      this.imageIndex = 0;  // İlk resmi göster
+    } else {
+      this.imageIndex = -1;  // Eğer resim yoksa
+      console.warn('No images available for this room');
+    }
+
+    this.showRoomDetailsPopup = true;
+  }
+
+  changeImage(direction: number): void {
+    if (this.selectedRoomDetails?.images?.length > 0) {
+      this.imageIndex = (this.imageIndex + direction + this.selectedRoomDetails.images.length) % this.selectedRoomDetails.images.length;
+    }
+  }
+
+  closeRoomDetailsPopup(): void {
+    this.showRoomDetailsPopup = false;
+    this.selectedRoomDetails = null;
+  }
+
+  closePopup(): void {
+    this.showNoRoomsPopup = false;
   }
 }

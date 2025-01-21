@@ -34,8 +34,9 @@
     </div>
 
     <!-- Odaları gösterme butonu -->
-    <button (click)="getAvailableRooms(selectedRoomType, selectedGuestCount, startDate, endDate)">Show Available
-        Rooms</button>
+    <button (click)="getAvailableRooms(selectedRoomType, selectedGuestCount, startDate, endDate)">
+        Show Available Rooms
+    </button>
 
     <!-- Odalar varsa gösterim yap -->
     <div *ngIf="rooms.length > 0" class="room-grid">
@@ -43,13 +44,39 @@
             <h3>{{ room.roomType | titlecase }}</h3>
             <p><strong>Guests:</strong> {{ room.guestCount }}</p>
             <p><strong>Price:</strong> ${{ room.price }}</p>
-            <button (click)="showRoomDetails(room.id)">About</button>
+            <button (click)="showRoomDetails(room)">About</button>
         </div>
     </div>
 
-    <!-- Odalar yoksa mesaj göster -->
-    <div *ngIf="rooms.length === 0 && roomsChecked">
-        <p>No rooms available for the selected criteria.</p>
+    <!-- Room Details Popup -->
+    <div *ngIf="showRoomDetailsPopup" class="popup">
+        <div class="popup-content">
+            <span class="popup-close" (click)="closeRoomDetailsPopup()">×</span>
+            <h3>{{ selectedRoomDetails?.roomType | titlecase }} Room</h3>
+
+            <!-- Image slider (Resimler arası geçiş için)-->
+            <div class="image-slider" *ngIf="selectedRoomDetails?.images?.length > 0">
+                <button class="slider-button left" (click)="changeImage(-1)">&#10094;</button>
+                <img *ngIf="imageIndex >= 0" [src]="'assets/images/' + selectedRoomDetails?.images[imageIndex]"
+                    alt="Room Image" class="popup-room-image">
+                <button class="slider-button right" (click)="changeImage(1)">&#10095;</button>
+            </div>
+
+            <!-- Eğer resim yoksa uyarı mesajı -->
+            <div *ngIf="imageIndex < 0">
+                <p>No images available for this room.</p>
+            </div>
+
+            <p>{{ selectedRoomDetails?.description }}</p>
+        </div>
+    </div>
+
+    <!-- No Rooms Available Popup -->
+    <div *ngIf="showNoRoomsPopup" class="popup">
+        <div class="popup-content">
+            <span class="popup-close" (click)="closePopup()">×</span>
+            <p>No rooms available for the selected criteria.</p>
+        </div>
     </div>
 
     <!-- Hata mesajı varsa -->
