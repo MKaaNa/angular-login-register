@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class RoomService {
+
   getRooms(selectedRoomType: string, selectedGuestCount: number, startDate: string, endDate: string) {
     throw new Error('Method not implemented.');
   }
@@ -21,6 +22,7 @@ export class RoomService {
         .set('endDate', endDate);
       return this.http.get<any[]>(this.apiUrl, { params });
   }
+    
 
   getRoomById(roomId: number): Observable<any> {
     const url = `${this.apiUrl}/${roomId}`;
