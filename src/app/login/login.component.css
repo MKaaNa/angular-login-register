@@ -1,11 +1,72 @@
-.login-block{
-  float:left;
-  width:100%;
-  padding : 50px 0;
+/* Login Ekranı Arka Plan Görseli ve Ortaya Yerleştirme */
+.login-container {
+  background-image: url('/assets/hotel.jpg'); /* Arka plan resmi */
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center; /* Yatayda ortalama */
+  align-items: center; /* Dikeyde ortalama */
+  text-align: center;
+}
+/* login.component.css */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f2f2f2; /* Arka plan rengini ekleyebilirsiniz */
 }
 
-.container{background:#D3D3D3; border-radius: 10px; width: 40%; height: 40%;}
-.login-sec{padding: 50px 30px; position:relative;}
-.login-sec h2{margin-bottom:30px; font-weight:800; font-size:30px; color: #0069c0;}
-.login-sec h2:after{content:" "; width:100px; height:5px; background:#6ec6ff; display:block; margin-top:20px; border-radius:3px; margin-left:auto;margin-right:auto}
-.btn-login{background: #0069c0; color:#fff; font-weight:600;}
+.login-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px; /* Maksimum genişlik */
+  text-align: center;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.input-container {
+  margin-bottom: 15px; /* Her bir input arasına boşluk ekler */
+  text-align: left;
+  width: 100%;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-sizing: border-box;
+}
+
+button:hover {
+  background-color: #45a049;
+}

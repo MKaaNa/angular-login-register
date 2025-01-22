@@ -7,9 +7,9 @@ import { RoomService } from './room.service';
   styleUrls: ['./room-search.component.css']
 })
 export class RoomSearchComponent {
-  minPrice: number;
-  maxPrice: number;
-  roomType: string;
+  minPrice!: number;
+  maxPrice!: number;
+  roomType!: string;
   rooms: any[] = [];
 
   constructor(private roomService: RoomService) { }

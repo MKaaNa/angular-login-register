@@ -22,6 +22,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },     // Giriş sayfası
   { path: 'dashboard', component: DashboardComponent },  // Dashboard sayfası
   { path: 'rooms', component: RoomListComponent },
+   { path: 'home', component: HomeComponent },
   { path: 'reservation', component: ReservationComponent },
   { path: '', redirectTo: '/reservation', pathMatch: 'full' },  // Yönlendirme
 ];
@@ -47,3 +48,8 @@ const routes: Routes = [
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
+
+
+

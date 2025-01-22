@@ -33,10 +33,6 @@
         <input type="date" id="endDate" [(ngModel)]="endDate" name="endDate">
     </div>
 
-    <!-- Odaları gösterme butonu -->
-    <button (click)="getAvailableRooms(selectedRoomType, selectedGuestCount, startDate, endDate)">
-        Show Available Rooms
-    </button>
 
     <!-- Odalar varsa gösterim yap -->
     <div *ngIf="rooms.length > 0" class="room-grid">
@@ -44,9 +40,17 @@
             <h3>{{ room.roomType | titlecase }}</h3>
             <p><strong>Guests:</strong> {{ room.guestCount }}</p>
             <p><strong>Price:</strong> ${{ room.price }}</p>
+            <p><strong>Start Date:</strong> {{ room.startDate }}</p>
+            <p><strong>End Date:</strong> {{ room.endDate }}</p>
             <button (click)="showRoomDetails(room)">About</button>
         </div>
     </div>
+
+
+    <!-- Oda tipi ve misafir sayısı ile birlikte tarihleri kullanarak filtreleme -->
+    <button (click)="getAvailableRooms(selectedRoomType, selectedGuestCount, startDate, endDate)">
+        Show Available Rooms
+    </button>
 
     <!-- Room Details Popup -->
     <div *ngIf="showRoomDetailsPopup" class="popup">

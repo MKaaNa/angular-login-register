@@ -1,22 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../_services/auth.service';
+import { Component } from '@angular/core';
+import { AuthService } from '../_services/auth.service';  // AuthService'i import et
+import { Router } from '@angular/router';  // Router'ı import et
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
 
-  constructor(public auth:AuthService) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();  // Kullanıcı giriş yapmış mı kontrol et
   }
 
-  logout(){
-      //remove token
-      this.auth.removeToken();
-      this.auth.canAccess();
+  logout(): void {
+    this.authService.removeToken();  // Token'ı kaldır
+    this.router.navigate(['/login']);  // Login sayfasına yönlendir
   }
-
 }

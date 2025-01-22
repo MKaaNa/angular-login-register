@@ -1,0 +1,75 @@
+/* Home Ekranı */
+.home-container {
+  background-image: url('/assets/hotel.jpg'); /* Arka plan görseli */
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  color: white; /* Yazı rengini beyaz yap */
+}
+
+/* Welcome container'ı ve butonları ortalamak için */
+.welcome-container {
+  background-color: rgba(0, 0, 0, 0.5); /* Yarı saydam siyah arka plan */
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  width: 90%; /* Ekranın %90'ını kapsasın */
+  max-width: 500px; /* Maksimum genişlik */
+  text-align: center;
+}
+
+/* Başlıklar */
+.welcome-container h1 {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.welcome-container p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+/* Butonların bulunduğu container */
+.button-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 25px; /* Butonlar arasındaki boşluğu artır */
+  margin-top: 30px;
+}
+
+/* Buton stilleri */
+button {
+  background-color: #4CAF50; /* Butonun yeşil rengi */
+  color: white;
+  padding: 20px 70px; /* Buton boyutunu büyüt */
+  border: none;
+  border-radius: 8px;
+  font-size: 14px; /* Font boyutunu küçült */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  width: auto; /* Otomatik genişlik */
+  max-width: 200px; /* Butonların genişliğini sınırlayalım */
+  align-self: center; /* Butonları ortalamak için */
+}
+
+/* Buton Hover efektleri */
+button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px); /* Hoverda buton yukarı kayacak */
+}
+
+/* Register butonuna özgü stil */
+.btn-register {
+  background-color: #3498db; /* Mavi renk */
+}
+
+.btn-register:hover {
+  background-color: #2980b9; /* Hoverda daha koyu mavi */
+}

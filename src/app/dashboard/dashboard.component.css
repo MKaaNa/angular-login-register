@@ -1,0 +1,44 @@
+/* Dashboard Ekranı Arka Plan Görseli ve Ortaya Yerleştirme */
+.dashboard-container {
+  background-image: url('/assets/hotel.jpg'); /* Arka plan resmi */
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center; /* Yatayda ortalama */
+  align-items: center; /* Dikeyde ortalama */
+  text-align: center;
+}
+
+/* Kapsayıcı Stili */
+.welcome-container {
+  background-color: rgba(255, 255, 255, 0.8); /* Şeffaf beyaz zemin */
+  padding: 40px;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 400px; /* Maksimum genişlik */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Hafif gölge */
+}
+
+h2 {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #4CAF50; /* Yeşil buton */
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 10px;
+  width: 100%; /* Butonlar tam genişlikte */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049; /* Hover efekti */
+}

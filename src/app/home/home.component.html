@@ -1,6 +1,11 @@
-<app-navbar></app-navbar>
-<div class="container">
-  <div class="text-center mt-5">
-    <h3>Home page</h3>
+<!-- home.component.html -->
+<div class="home-container">
+  <div class="welcome-container">
+    <h1>Welcome to Gold Hotel</h1>
+
+    <div class="button-container">
+      <button *ngIf="!authService.isAuthenticated()" (click)="goToLogin()">Login</button>
+      <button *ngIf="!authService.isAuthenticated()" (click)="goToRegister()">Register</button>
+    </div>
   </div>
 </div>

@@ -152,7 +152,7 @@ button:hover {
 /* Grid düzeni için ayarlar */
 .room-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Ekran boyutuna göre ayar */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Ekran boyutuna göre odaları ayarla */
   gap: 20px;
   padding: 20px;
   margin-top: 20px;
@@ -169,6 +169,22 @@ button:hover {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Tarih bilgileri için düzenleme */
+.room-card p {
+  margin-bottom: 10px;
+  font-size: 16px;
+  text-align: left;  /* Tarihlerin sola hizalanması için */
+}
+
+/* Tarih başlıklarını belirginleştirmek */
+.room-card p strong {
+  font-weight: bold;
+  color: #4CAF50; /* Yeşil renk */
 }
 
 /* Hoverda oda kartı biraz büyüsün */
@@ -182,12 +198,6 @@ button:hover {
   font-size: 1.4em;
   font-weight: bold;
   margin-bottom: 15px;
-}
-
-/* Oda bilgileri ve butonlar */
-.room-card p {
-  margin-bottom: 10px;
-  font-size: 16px;
 }
 
 /* "About" butonunu modernleştirelim */
@@ -210,6 +220,15 @@ button:hover {
 .room-grid p {
   font-size: 1.2em;
   color: #333;
+}
+
+/* Checkbox için stil */
+#filterDateRange {
+  margin-right: 10px;
+}
+
+label {
+  font-size: 14px;
 }
 
 /* No rooms available mesajı */
