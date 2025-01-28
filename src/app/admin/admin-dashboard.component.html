@@ -28,31 +28,30 @@
       </table>
     </div>
   
-    <!-- Kullanıcı ekleme ve düzenleme modalı -->
-    <div class="modal" *ngIf="showAddUserModal">
-      <div class="modal-content">
-        <span class="close" (click)="closeModal()">&times;</span>
-        <h2 *ngIf="newUser.id">Edit User</h2>
-        <h2 *ngIf="!newUser.id">Add New User</h2>
-        <form (ngSubmit)="saveUser()">
-          <label for="email">Email:</label>
-          <input type="email" [(ngModel)]="newUser.email" name="email" required />
-  
-          <label for="name">Name:</label>
-          <input type="text" [(ngModel)]="newUser.name" name="name" required />
-  
-          <label for="role">Role:</label>
-          <select [(ngModel)]="newUser.userRole" name="role" required>
-            <option value="ADMIN">Admin</option>
-            <option value="CUSTOMER">Customer</option>
-          </select>
-  
-          <button type="submit">Submit</button>
-          <button type="button" (click)="closeModal()">Cancel</button>
-        </form>
-      </div>
+     <!-- Kullanıcı Ekleme ve Düzenleme Modalı -->
+     <div class="modal" *ngIf="showEditUserModal">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>Edit User</h2>
+            <form (ngSubmit)="saveUser()">
+                <label for="email">Email</label>
+                <input type="email" id="email" [(ngModel)]="newUser.email" name="email" required />
+
+                <label for="username">Name</label>
+                <input type="text" id="username" [(ngModel)]="newUser.name" name="name" required />
+
+                <label for="role">Role</label>
+                <select id="role" [(ngModel)]="newUser.userRole" name="role" required>
+                    <option value="ADMIN">Admin</option>
+                    <option value="CUSTOMER">Customer</option>
+                </select>
+
+                <button type="submit">Save Changes</button>
+                <button type="button" (click)="closeModal()">Cancel</button>
+            </form>
+        </div>
     </div>
-    
+
   <!-- Kullanıcı düzenleme modalı -->
 <div *ngIf="showEditUserModal" class="modal">
     <div class="modal-content">
