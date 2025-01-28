@@ -7,23 +7,20 @@ import { Room } from '../models/room.model';
   providedIn: 'root',
 })
 export class RoomService {
-addRoom(newRoom: Room): Observable<Room> {
-    return this.http.post<Room>(this.apiUrl, newRoom);
+  addRoom(room: any): Observable<Room> {
+    return this.http.post<Room>(`${this.apiUrl}/rooms`, room);  // Oda ekleme işlemi
   }
 
   deleteRoom(roomId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${roomId}`);
   }
 
-  updateRoom(roomId: number, price: number): Observable<Room> {
-    return this.http.put<Room>(`${this.apiUrl}/${roomId}`, { price });
-  }
   // Ensure getRooms is defined here
   getRooms(): Observable<Room[]> {
-    return this.http.get<Room[]>(this.apiUrl);
+    return this.http.get<Room[]>(`${this.apiUrl}/rooms`);
   }
 
-  private apiUrl = 'http://localhost:8080/rooms';  // API URL'si
+  private apiUrl = 'http://localhost:8080';  // API URL'si
 
   constructor(private http: HttpClient) {}
 
@@ -67,6 +64,11 @@ addRoom(newRoom: Room): Observable<Room> {
     const url = `${this.apiUrl}/${roomId}`;
     return this.http.get<any>(url);
   }
+
+
+updateRoom(roomId: number, updatedRoom: any): Observable<Room> {
+  return this.http.put<Room>(`${this.apiUrl}/rooms/${roomId}`, updatedRoom);  // Odayı güncelleme işlemi
+}
 
   // Fiyat aralığına göre odaları aramak için API çağrısı
   searchRooms(minPrice: number, maxPrice: number, roomType: string): Observable<any[]> {
