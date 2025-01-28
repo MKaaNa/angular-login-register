@@ -1,12 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { Room } from '../models/room.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoomService {
+addRoom(newRoom: Room): Observable<Room> {
+    return this.http.post<Room>(this.apiUrl, newRoom);
+  }
+
+  deleteRoom(roomId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${roomId}`);
+  }
+
+  updateRoom(roomId: number, price: number): Observable<Room> {
+    return this.http.put<Room>(`${this.apiUrl}/${roomId}`, { price });
+  }
+  // Ensure getRooms is defined here
+  getRooms(): Observable<Room[]> {
+    return this.http.get<Room[]>(this.apiUrl);
+  }
 
   private apiUrl = 'http://localhost:8080/rooms';  // API URL'si
 
@@ -58,4 +73,5 @@ export class RoomService {
     const url = `${this.apiUrl}?minPrice=${minPrice}&maxPrice=${maxPrice}&roomType=${roomType}`;
     return this.http.get<any[]>(url);
   }
+
 }

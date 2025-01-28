@@ -21,7 +21,7 @@ throw new Error('Method not implemented.');
   ngOnInit(): void {
     this.isAuthenticated = this.authService.isAuthenticated(); // Giriş yapılıp yapılmadığını kontrol et
     if (this.isAuthenticated) {
-      const userInfo$ = this.authService.getUserInfo(); // Kullanıcı bilgilerini alıyoruz
+      const userInfo$ = this.authService.getUserInfo(this.user.email); // Kullanıcı bilgilerini alıyoruz
       userInfo$?.subscribe(
         (userData) => {
           this.user = userData;  // Kullanıcı bilgilerini al

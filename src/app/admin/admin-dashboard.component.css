@@ -1,0 +1,32 @@
+/* admin-dashboard.component.css */
+.admin-dashboard {
+  padding: 20px;
+  background-color: #f4f4f9;
+  border-radius: 8px;
+}
+
+button {
+  padding: 10px 15px;
+  margin: 10px 0;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th, .table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}

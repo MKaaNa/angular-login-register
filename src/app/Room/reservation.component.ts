@@ -34,28 +34,6 @@ totalPages: any;
 
   ngOnInit(): void {}
 
-  // Odaları al
-  /* getAvailableRooms(roomType: string, guestCount: number, startDate: string, endDate: string): void {
-    if (this.filterByDateRange) {
-      this.getAvailableRoomsWithDateRange(roomType, guestCount, startDate, endDate);
-    } else {
-      this.roomService.getAvailableRooms(roomType, guestCount, startDate, endDate)
-        .subscribe(
-          (rooms: any[]) => {
-            this.rooms = rooms;
-            if (rooms.length === 0) {
-              this.showNoRoomsPopup = true;
-            } else {
-              this.showNoRoomsPopup = false;
-            }
-          },
-          (error: any) => {
-            console.error('Error fetching available rooms', error);
-            this.showNoRoomsPopup = true;
-          }
-        );
-    }
-  } */
   
   getAvailableRooms(roomType: string, guestCount: number, startDate: string, endDate: string): void {
   this.roomService.getAvailableRooms(roomType, guestCount, startDate, endDate)
@@ -74,8 +52,6 @@ totalPages: any;
       }
     );
 }
-  
-  
 
   // Tarih aralığına göre filtreleme
   getAvailableRoomsWithDateRange(roomType: string, guestCount: number, startDate: string, endDate: string): void {

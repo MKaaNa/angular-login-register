@@ -13,6 +13,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { RoomListComponent } from './Room/room-list.component';
 import { ReservationComponent } from './Room/reservation.component';
 import { RoomService } from './Room/room.service';
+import { AdminDashboardComponent } from './admin/admin-dashboard.component';
+import { UserService } from './_services/user.service';
+
 
 
 // Yönlendirme ayarları
@@ -22,7 +25,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },     // Giriş sayfası
   { path: 'dashboard', component: DashboardComponent },  // Dashboard sayfası
   { path: 'rooms', component: RoomListComponent },
-   { path: 'home', component: HomeComponent },
+  { path: 'home', component: HomeComponent },
+  { path: 'admin-dashboard', component: AdminDashboardComponent},
   { path: 'reservation', component: ReservationComponent },
   { path: '', redirectTo: '/reservation', pathMatch: 'full' },  // Yönlendirme
 ];
@@ -35,12 +39,13 @@ const routes: Routes = [
     RegisterComponent,
     LoginComponent,
     DashboardComponent,
+    AdminDashboardComponent,
     RoomListComponent,
     ReservationComponent,
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes),  // Yönlendirmeleri burada tanımlıyoruz
+    RouterModule.forRoot(routes),  
     FormsModule,
     HttpClientModule
   ],
