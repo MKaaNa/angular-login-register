@@ -5,7 +5,6 @@ import { Room } from '../models/room.model';
 import { User } from '../models/user.model';
 import { AuthService } from '../_services/auth.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -17,7 +16,8 @@ export class AdminDashboardComponent implements OnInit {
   users: any[] = [];
   rooms: any[] = [];
   showAddUserModal: boolean = false;
-  newUser: any = { id: '', email: '', username: '', password: '', role: '' };
+  showEditUserModal: boolean = false;
+  newUser: any = { id: '', email: '', name: '', password: '', user_role: '' };
   showAddRoomModal: boolean = false;
   newRoom: any = { roomType: '', price: 0 };
 
@@ -33,62 +33,71 @@ export class AdminDashboardComponent implements OnInit {
     if (!this.authService.isAdmin()) {
       this.router.navigate(['/login']);
     }
-
     this.loadRooms();
     this.loadUsers();
   }
 
+  // Kullanıcı ekleme ve düzenleme için modal açma
   openAddUserModal(): void {
-    this.showAddUserModal = true;
-    this.newUser = { id: '', email: '', username: '', password: '', role: '' };
+    this.showEditUserModal = false;  // Yeni kullanıcı eklerken düzenleme modunu kapatıyoruz
+    this.showAddUserModal = true;    // Yeni kullanıcı ekleme modalını açıyoruz
+    this.newUser = { id: '', email: '', name: '', password: '', userRole: '' };
+  }
+
+
+  // Kullanıcı düzenleme için modal açma
+  openEditUserModal(user: User): void {
+    this.showEditUserModal = true;
+    this.newUser = { ...user };  // Seçilen kullanıcıyı modalda göstermek için
   }
 
   openAddRoomModal(): void {
     this.showAddRoomModal = true;
+    this.newRoom = { roomType: '', price: 0 };  // Yeni oda eklerken formu sıfırla
   }
 
+  // Modal'ı kapatma
   closeModal(): void {
     this.showAddUserModal = false;
+    this.showEditUserModal = false;
     this.showAddRoomModal = false;
   }
 
-  addUser(): void {
+  // Kullanıcı ekleme
+  addUser() {
     if (this.newUser.id) {
       this.userService.updateUser(this.newUser).subscribe((updatedUser: User) => {
         const index = this.users.findIndex(u => u.id === updatedUser.id);
         if (index !== -1) {
-          this.users[index] = updatedUser;
+          this.users[index] = updatedUser;  // Kullanıcıyı güncelliyoruz
         }
-        this.closeModal();
+        this.closeModal();  // Modalı kapatıyoruz
       });
     } else {
       this.userService.addUser(this.newUser).subscribe((newUser: User) => {
-        this.users.push(newUser);
-        this.newUser = { id: '', email: '', username: '', password: '', role: '' };
-        this.closeModal();
+        this.users.push(newUser);  // Yeni kullanıcıyı listeye ekliyoruz
+        this.newUser = { id: '', email: '', username: '', password: '', role: '' };  // Formu sıfırlıyoruz
+        this.closeModal();  // Modalı kapatıyoruz
       });
     }
   }
 
-  editUser(userId: number): void {
+  // Kullanıcıyı düzenleme işlemi
+  editUser(userId: number) {
     const userToEdit = this.users.find(user => user.id === userId);
     if (userToEdit) {
-      this.newUser = { ...userToEdit };
-      this.showAddUserModal = true;
+      this.openEditUserModal(userToEdit);  // Kullanıcının bilgilerini modalda göstermek için
     }
   }
 
- // Kullanıcıyı silme işlemi
- deleteUser(userId: number) {
-  if (userId !== undefined && userId !== null) {
+  // Kullanıcıyı silme işlemi
+  deleteUser(userId: number) {
     this.userService.deleteUser(userId).subscribe(() => {
-      this.users = this.users.filter(user => user.id !== userId);
+      this.users = this.users.filter(user => user.id !== userId);  // Silinen kullanıcıyı listeden çıkarıyoruz
     });
-  } else {
-    console.error('User ID is undefined');
   }
-}
 
+  // Oda ekleme
   addRoom(): void {
     this.roomService.addRoom(this.newRoom).subscribe((room) => {
       this.rooms.push(room);
@@ -97,6 +106,7 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
+  // Oda düzenleme
   editRoom(roomId: number): void {
     const updatedRoom = {
       roomType: 'Deluxe',
@@ -110,25 +120,68 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
+  // Oda silme
   deleteRoom(roomId: number): void {
     this.roomService.deleteRoom(roomId).subscribe(() => {
       this.rooms = this.rooms.filter(room => room.id !== roomId);
     });
   }
 
+// Kullanıcı bilgilerini güncellemek için
+updateUser(): void {
+  if (this.newUser.id) {
+    this.userService.updateUser(this.newUser).subscribe(
+      (updatedUser) => {
+        // Güncellenen user'ı listede de güncelle
+        const index = this.users.findIndex(u => u.id === updatedUser.id);
+        if (index !== -1) {
+          this.users[index] = updatedUser;
+        }
+        this.closeModal();
+      },
+      error => {
+        console.error('Update failed:', error);
+      }
+    );
+  }
+}
+
+saveUser(): void {
+  if (this.newUser.id) {
+    // Kullanıcıyı güncelleme
+    this.userService.updateUser(this.newUser).subscribe((updatedUser: User) => {
+      const index = this.users.findIndex(u => u.id === updatedUser.id);
+      if (index !== -1) {
+        this.users[index] = updatedUser;
+      }
+      this.closeModal();
+    });
+  } else {
+    // Yeni kullanıcı ekleme
+    this.userService.addUser(this.newUser).subscribe((newUser: User) => {
+      this.users.push(newUser);
+      this.newUser = { id: '', email: '', name: '', password: '', userRole: '' };  // Yeni kullanıcıyı sıfırla
+      this.closeModal();
+    });
+  }
+}
+
+  // Kullanıcıları yükleme
+  loadUsers(): void {
+    this.userService.getUsers().subscribe((users: User[]) => {
+      this.users = users;
+    });
+  }
+
+  // Odaları yükleme
   loadRooms(): void {
     this.roomService.getRooms().subscribe((rooms: Room[]) => {
       this.rooms = rooms;
     });
   }
-  loadUsers(): void {
-    this.userService.getUsers().subscribe((users: User[]) => {
-      this.users = users;
-      console.log(this.users);  // Kullanıcıları konsola yazdırarak kontrol edin
-    });
-  }
-   // Logout işlemi
-   logout(): void {
+
+  // Logout işlemi
+  logout(): void {
     this.authService.logout();  // AuthService üzerinden logout işlemi yapılır
     this.router.navigate(['/login']);  // Login sayfasına yönlendir
   }

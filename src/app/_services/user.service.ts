@@ -23,15 +23,18 @@ export class UserService {
 
   // Kullanıcıyı silmek için API çağrısı
   deleteUser(userId: number): Observable<void> {
-    return this.http.delete<void>(`/api/users/${userId}`);
+    return this.http.delete<void>(`${this.apiUrl}/users/${userId}`);
   }
-  // Kullanıcı rolünü güncellemek için API çağrısı
-  updateUserRole(userId: number, role: string): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/users/${userId}`, { role });  // Kullanıcı rolünü güncellemek için PUT methodu
+editUser(user: User): void {
+  this.openEditUserModal(user);  // Kullanıcının bilgilerini modalda göstermek için
+}
+  openEditUserModal(user: User) {
+    throw new Error('Method not implemented.');
   }
 
    // Kullanıcıyı güncelle
    updateUser(user: User): Observable<User> {
+    console.log('Updating User:', user);
     return this.http.put<User>(`${this.apiUrl}/users/${user.id}`, user);  // Kullanıcıyı güncelleme işlemi
   }
 }
