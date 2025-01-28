@@ -8,6 +8,12 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./reservation.component.css'],
 })
 export class ReservationComponent implements OnInit {
+previousPage() {
+throw new Error('Method not implemented.');
+}
+nextPage() {
+throw new Error('Method not implemented.');
+}
   selectedRoomType: string = '';  
   selectedGuestCount: number = 1;  
   startDate: string = '';  
@@ -19,13 +25,17 @@ export class ReservationComponent implements OnInit {
   showRoomDetailsPopup: boolean = false;
   imageIndex: number = 0;  
   errorMessage: string = '';  
-  filterByDateRange: boolean = false;  // Tarih aralığına göre filtreleme için checkbox
+  filterByDateRange: boolean = false;
+paginatedRooms: any;
+currentPage: any;
+totalPages: any;
 
   constructor(private roomService: RoomService, private http: HttpClient) { }
 
   ngOnInit(): void {}
 
-  getAvailableRooms(roomType: string, guestCount: number, startDate: string, endDate: string): void {
+  // Odaları al
+  /* getAvailableRooms(roomType: string, guestCount: number, startDate: string, endDate: string): void {
     if (this.filterByDateRange) {
       this.getAvailableRoomsWithDateRange(roomType, guestCount, startDate, endDate);
     } else {
@@ -39,28 +49,47 @@ export class ReservationComponent implements OnInit {
               this.showNoRoomsPopup = false;
             }
           },
-          (error:any) => {
+          (error: any) => {
             console.error('Error fetching available rooms', error);
             this.showNoRoomsPopup = true;
           }
         );
     }
-  }
+  } */
+  
+  getAvailableRooms(roomType: string, guestCount: number, startDate: string, endDate: string): void {
+  this.roomService.getAvailableRooms(roomType, guestCount, startDate, endDate)
+    .subscribe(
+      (rooms: any[]) => {
+        this.rooms = rooms;
+        if (rooms.length === 0) {
+          this.showNoRoomsPopup = true;
+        } else {
+          this.showNoRoomsPopup = false;
+        }
+      },
+      (error: any) => {
+        console.error('Error fetching available rooms', error);
+        this.showNoRoomsPopup = true;
+      }
+    );
+}
+  
+  
 
-  // Tarih aralığına göre filtreleme fonksiyonu
+  // Tarih aralığına göre filtreleme
   getAvailableRoomsWithDateRange(roomType: string, guestCount: number, startDate: string, endDate: string): void {
     this.roomService.getAvailableRooms(roomType, guestCount, startDate, endDate)
       .subscribe(
         (rooms: any[]) => {
-          // Tarih aralığına göre odaları filtreleyelim
-          let filteredRooms = rooms.filter((room:any) => {
+          let filteredRooms = rooms.filter((room: any) => {
             let availableDates = room.availableDates;
-            return availableDates.some((date:string) => {
+            return availableDates.some((date: string) => {
               return date >= startDate && date <= endDate;
             });
           });
 
-          this.rooms = filteredRooms.map(room => ({...room,startDate,endDate}));
+          this.rooms = filteredRooms.map(room => ({ ...room, startDate, endDate }));
 
           if (filteredRooms.length === 0) {
             this.showNoRoomsPopup = true;
@@ -68,13 +97,14 @@ export class ReservationComponent implements OnInit {
             this.showNoRoomsPopup = false;
           }
         },
-        (error:any) => {
+        (error: any) => {
           console.error('Error fetching available rooms with date range', error);
           this.showNoRoomsPopup = true;
         }
       );
   }
 
+  // Oda detaylarını göster
   showRoomDetails(room: any): void {
     this.selectedRoomDetails = room;
 
@@ -99,22 +129,36 @@ export class ReservationComponent implements OnInit {
     this.showRoomDetailsPopup = true;
   }
 
+// Sıralama fonksiyonu
+  sortByColumn(column: string): void {
+    this.rooms.sort((a, b) => {
+      if (column === 'price') {
+        return b.price - a.price;  // Fiyat olarak büyükten küçüğe sıralama
+      } else if (column === 'startDate' || column === 'endDate') {
+        return new Date(b[column]).getTime() - new Date(a[column]).getTime();  // Tarihlere göre sıralama
+      } else if (column === 'guestCount') {
+        return b.guestCount - a.guestCount;  // Misafir sayısına göre sıralama
+      }
+      return 0;
+    });
+  }
+
+
+  // Resim değiştirme işlevi
   changeImage(direction: number): void {
     if (this.selectedRoomDetails?.images?.length > 0) {
       this.imageIndex = (this.imageIndex + direction + this.selectedRoomDetails.images.length) % this.selectedRoomDetails.images.length;
     }
   }
 
+  // Oda detaylarını popup kapatma
   closeRoomDetailsPopup(): void {
     this.showRoomDetailsPopup = false;
     this.selectedRoomDetails = null;
   }
 
+  // Popup'ı kapatma
   closePopup(): void {
     this.showNoRoomsPopup = false;
   }
 }
-
-
-
-

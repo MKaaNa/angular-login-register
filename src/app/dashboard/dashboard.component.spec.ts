@@ -7,6 +7,12 @@ import { AuthService } from '../_services/auth.service';  // AuthService'i impor
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+makeReservation() {
+throw new Error('Method not implemented.');
+}
+logout() {
+throw new Error('Method not implemented.');
+}
   user: any = {};  // Kullanıcı bilgisi burada saklanabilir
   isAuthenticated: boolean = false;  // Kullanıcının giriş yapıp yapmadığını kontrol ederiz
 

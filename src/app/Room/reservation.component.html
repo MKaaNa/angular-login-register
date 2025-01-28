@@ -33,26 +33,60 @@
         <input type="date" id="endDate" [(ngModel)]="endDate" name="endDate">
     </div>
 
-
-    <!-- Odalar varsa gösterim yap -->
-    <div *ngIf="rooms.length > 0" class="room-grid">
-        <div class="room-card" *ngFor="let room of rooms">
-            <h3>{{ room.roomType | titlecase }}</h3>
-            <p><strong>Guests:</strong> {{ room.guestCount }}</p>
-            <p><strong>Price:</strong> ${{ room.price }}</p>
-            <p><strong>Start Date:</strong> {{ room.startDate }}</p>
-            <p><strong>End Date:</strong> {{ room.endDate }}</p>
-            <button (click)="showRoomDetails(room)">About</button>
-        </div>
-    </div>
-
-
-    <!-- Oda tipi ve misafir sayısı ile birlikte tarihleri kullanarak filtreleme -->
+    <!-- Show Available Rooms Button -->
     <button (click)="getAvailableRooms(selectedRoomType, selectedGuestCount, startDate, endDate)">
         Show Available Rooms
     </button>
 
-    <!-- Room Details Popup -->
+    <!-- 3'ten fazla oda varsa tabloyu göster, yoksa grid görünümü -->
+    <div *ngIf="rooms.length > 3; else gridView">
+        <table class="room-table">
+            <thead>
+                <tr>
+                    <th (click)="sortByColumn('roomType')">Room Type</th>
+                    <th (click)="sortByColumn('guestCount')">Guests</th>
+                    <th (click)="sortByColumn('price')">Price</th>
+                    <th (click)="sortByColumn('startDate')">Start Date</th>
+                    <th (click)="sortByColumn('endDate')">End Date</th>
+                    <th>About</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let room of rooms">
+                    <td>{{ room.roomType | titlecase }}</td>
+                    <td>{{ room.guestCount }}</td>
+                    <td>{{ room.price | currency }}</td>
+                    <td>{{ room.startDate | date: 'shortDate' }}</td>
+                    <td>{{ room.endDate | date: 'shortDate' }}</td>
+                    <td><button (click)="showRoomDetails(room)">About</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 3 veya daha az oda varsa grid görünümünü göster -->
+    <ng-template #gridView>
+        <div class="room-grid">
+            <div class="room-card" *ngFor="let room of rooms">
+                <h3>{{ room.roomType | titlecase }}</h3>
+                <p><strong>Guests:</strong> {{ room.guestCount }}</p>
+                <p><strong>Price:</strong> ${{ room.price }}</p>
+                <p><strong>Start Date:</strong> {{ room.startDate }}</p>
+                <p><strong>End Date:</strong> {{ room.endDate }}</p>
+                <button (click)="showRoomDetails(room)">About</button>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- Odalar yoksa uyarı mesajı -->
+    <div *ngIf="showNoRoomsPopup" class="popup">
+        <div class="popup-content">
+            <span class="popup-close" (click)="closePopup()">×</span>
+            <p>No rooms available for the selected criteria.</p>
+        </div>
+    </div>
+
+    <!-- Oda detayları popup -->
     <div *ngIf="showRoomDetailsPopup" class="popup">
         <div class="popup-content">
             <span class="popup-close" (click)="closeRoomDetailsPopup()">×</span>
@@ -72,14 +106,6 @@
             </div>
 
             <p>{{ selectedRoomDetails?.description }}</p>
-        </div>
-    </div>
-
-    <!-- No Rooms Available Popup -->
-    <div *ngIf="showNoRoomsPopup" class="popup">
-        <div class="popup-content">
-            <span class="popup-close" (click)="closePopup()">×</span>
-            <p>No rooms available for the selected criteria.</p>
         </div>
     </div>
 
