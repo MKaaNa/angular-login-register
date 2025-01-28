@@ -83,11 +83,10 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   // Kullanıcıyı düzenleme işlemi
-  editUser(userId: number) {
-    const userToEdit = this.users.find(user => user.id === userId);
-    if (userToEdit) {
-      this.openEditUserModal(userToEdit);  // Kullanıcının bilgilerini modalda göstermek için
-    }
+  editUser(user: User): void {
+    console.log('Editing user:', user); // Kullanıcıyı düzenlemek için konsola yazdırıyoruz
+    this.newUser = { ...user };  // Seçilen kullanıcıyı modalda göstermek için
+    this.showEditUserModal = true;  // Edit modalını açıyoruz
   }
 
   // Kullanıcıyı silme işlemi
