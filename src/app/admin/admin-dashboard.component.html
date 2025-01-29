@@ -1,33 +1,35 @@
 <div class="admin-dashboard">
     <h2>Admin Dashboard</h2>
   
-    <!-- Kullanıcı yönetimi -->
-    <div class="user-management">
-      <h3>User Management</h3>
-      <button (click)="openAddUserModal()">Add New User</button>
-  
-      <!-- Kullanıcı listesi -->
-      <table class="user-table">
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of users">
-            <td>{{ user.email }}</td>
-            <td>{{ user.userRole }}</td>
-            <td>
-              <button (click)="editUser(user)">Edit</button>
-              <button (click)="deleteUser(user.id)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  
+
+  <!-- Kullanıcılar Tablosu -->
+<div class="tab-content" [ngClass]="{active: currentTab === 'userManagement'}">
+  <h3>User Management</h3>
+  <button (click)="openAddUserModal()">Add New User</button>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users | paginate: { itemsPerPage: 5, currentPage: p }">
+        <td>{{ user.email }}</td>
+        <td>{{ user.userRole }}</td>
+        <td>
+          <button (click)="editUser(user)">Edit</button>
+          <button (click)="deleteUser(user.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Sayfalama -->
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+
      <!-- Kullanıcı Ekleme ve Düzenleme Modalı -->
      <div class="modal" *ngIf="showEditUserModal">
         <div class="modal-content">
@@ -51,6 +53,31 @@
             </form>
         </div>
     </div>
+
+ <!-- Yeni Kullanıcı Ekleme Modalı -->
+ <div class="modal" *ngIf="showAddUserModal">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <h2>Add New User</h2>
+    <form (ngSubmit)="addUser()">
+      <label for="email">Email:</label>
+      <input type="email" [(ngModel)]="newUser.email" name="email" required />
+
+      <label for="name">Name:</label>
+      <input type="text" [(ngModel)]="newUser.name" name="name" required />
+
+      <label for="role">Role:</label>
+      <select [(ngModel)]="newUser.userRole" name="role" required>
+        <option value="ADMIN">Admin</option>
+        <option value="CUSTOMER">Customer</option>
+      </select>
+
+      <button type="submit">Add User</button>
+      <button type="button" (click)="closeModal()">Cancel</button>
+    </form>
+  </div>
+</div>
+
 
   <!-- Kullanıcı düzenleme modalı -->
 <div *ngIf="showEditUserModal" class="modal">
@@ -77,48 +104,29 @@
   </div>
     <button class="btn-logout" (click)="logout()">Logout</button>
   
-    <!-- Oda yönetimi -->
-    <div class="room-management">
-      <h3>Room Management</h3>
-      <button (click)="showAddRoomModal = true">Add New Room</button>
-  
-      <!-- Oda listesi -->
-      <table class="room-table">
-        <thead>
-          <tr>
-            <th>Room Type</th>
-            <th>Price</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let room of rooms">
-            <td>{{ room.roomType }}</td>
-            <td>{{ room.price }}</td>
-            <td>
-              <button (click)="editRoom(room.id)">Edit</button>
-              <button (click)="deleteRoom(room.id)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  
-    <!-- Oda ekleme modalı -->
-    <div *ngIf="showAddRoomModal" class="modal">
-      <div class="modal-content">
-        <span class="close" (click)="closeModal()">&times;</span>
-        <h2>Add New Room</h2>
-        <form (ngSubmit)="addRoom()">
-          <label for="roomType">Room Type:</label>
-          <input type="text" [(ngModel)]="newRoom.roomType" name="roomType" required />
-  
-          <label for="price">Price:</label>
-          <input type="number" [(ngModel)]="newRoom.price" name="price" required />
-  
-          <button type="submit">Add Room</button>
-          <button type="button" (click)="closeModal()">Cancel</button>
-        </form>
-      </div>
-    </div>
+   <!-- Room Management Tablo İçeriği -->
+   <div class="tab-content" [ngClass]="{ active: currentTab === 'roomManagement' }">
+    <h3>Room Management</h3>
+    <button (click)="openAddRoomModal()">Add New Room</button>
+
+    <!-- Oda Listesi -->
+    <table class="room-table">
+      <thead>
+        <tr>
+          <th>Room Type</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let room of rooms">
+          <td>{{ room.roomType }}</td>
+          <td>{{ room.price }}</td>
+          <td>
+            <button (click)="editRoom(room.id)">Edit</button>
+            <button (click)="deleteRoom(room.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>

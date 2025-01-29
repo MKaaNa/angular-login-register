@@ -1,94 +1,116 @@
-/* Admin Dashboard Genel Stil */
+/* Genel Sayfa ve Admin Dashboard Stil */
 .admin-dashboard {
-  padding: 20px;
-  background-color: #f4f4f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin: 20px;
+  background-color: #121212;
+  color: #fff;
+  padding: 40px;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 10px;
+  max-width: 1200px;
+  margin: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Buton Stili */
-button {
-  padding: 10px 15px;
-  margin: 10px 0;
+/* Hoşgeldin Mesajı */
+.welcome-message {
+  font-size: 20px;
+  margin-bottom: 30px;
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+/* Sekme Başlıklarının Stili */
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  padding: 12px 20px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.tabs button.active {
+  background-color: #4CAF50;
+}
+
+.tabs button:hover {
+  background-color: #555;
+  transform: scale(1.05);
+}
+
+/* Sekme İçeriği */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Kullanıcı ve Oda Tabloları */
+.table {
+  width: 100%;
+  margin-top: 30px;
+  border-collapse: collapse;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+  padding: 14px;
+  text-align: left;
+  font-size: 16px;
+}
+
+.table th {
+  background-color: #444;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.table td {
+  background-color: #333;
+  color: #fff;
+  border-bottom: 1px solid #444;
+}
+
+.table tr:nth-child(even) {
+  background-color: #555;
+}
+
+.table tr:hover {
+  background-color: #666;
+}
+
+.table td button {
+  padding: 6px 12px;
   background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
+.table td button:hover {
   background-color: #45a049;
-  transform: scale(1.05);
 }
 
-button:active {
-  background-color: #3e8e41;
-  transform: scale(1);
-}
-
-button.cancel {
+.table td button.delete {
   background-color: #f44336;
 }
 
-button.cancel:hover {
+.table td button.delete:hover {
   background-color: #da190b;
-}
-
-/* Kullanıcılar Tablosu */
-.user-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.user-table th, .user-table td {
-  padding: 15px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  font-size: 16px;
-}
-
-.user-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.user-table td {
-  background-color: #fafafa;
-}
-
-.user-table td a {
-  color: #4CAF50;
-  text-decoration: none;
-}
-
-.user-table td a:hover {
-  text-decoration: underline;
-}
-
-.user-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.user-table tr:hover {
-  background-color: #f1f1f1;
-}
-
-.user-table td {
-  padding: 12px;
-}
-
-.user-table td:last-child {
-  text-align: center;
 }
 
 /* Modal Stili */
@@ -116,7 +138,6 @@ button.cancel:hover {
 .modal h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: #333;
 }
 
 .modal input, .modal select {
@@ -125,7 +146,6 @@ button.cancel:hover {
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 16px;
 }
 
 .modal button {
@@ -136,7 +156,6 @@ button.cancel:hover {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
 }
 
 .modal button:hover {
@@ -151,28 +170,87 @@ button.cancel:hover {
   background-color: #da190b;
 }
 
-/* Genel Modal Kapama Butonu */
-.close {
-  color: #aaa;
-  font-size: 28px;
-  font-weight: bold;
-  float: right;
+/* Sayfalama butonları */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.close:hover,
-.close:focus {
-  color: black;
+.pagination-controls ul {
+  display: flex;
+  list-style-type: none;
+}
+
+.pagination-controls li {
+  margin: 0 5px;
+}
+
+.pagination-controls li a {
+  padding: 8px 16px;
+  background-color: #333;
+  color: #fff;
   text-decoration: none;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-/* Tablet ve Mobil Ekranlar İçin Uyumluluk */
+.pagination-controls li a:hover {
+  background-color: #4CAF50;
+}
+
+.pagination-controls li a.active {
+  background-color: #4CAF50;
+}
+
+
+/* Logout Butonu */
+.btn-logout {
+  background-color: #f44336;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: background-color 0.3s ease;
+  text-transform: uppercase;
+}
+
+.btn-logout:hover {
+  background-color: #da190b;
+}
+
+.btn-logout:focus {
+  outline: none;
+}
+
+/* Tablet ve Mobil Cihazlar İçin Stil */
 @media (max-width: 768px) {
-  .user-table {
-    width: 100%;
+  .admin-dashboard {
+    padding: 20px;
+  }
+
+  .table th, .table td {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .tabs button {
+    padding: 10px 18px;
+    font-size: 14px;
   }
 
   .modal-content {
-    width: 90%;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .modal h2 {
+    font-size: 18px;
+  }
+
+  .table td button {
+    font-size: 14px;
   }
 }

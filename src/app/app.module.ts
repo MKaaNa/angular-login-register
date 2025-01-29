@@ -15,6 +15,7 @@ import { ReservationComponent } from './Room/reservation.component';
 import { RoomService } from './Room/room.service';
 import { AdminDashboardComponent } from './admin/admin-dashboard.component';
 import { UserService } from './_services/user.service';
+import { NgxPaginationModule } from 'ngx-pagination'; // Import the module
 
 
 
@@ -47,6 +48,7 @@ const routes: Routes = [
     BrowserModule,
     RouterModule.forRoot(routes),  
     FormsModule,
+    NgxPaginationModule,
     HttpClientModule
   ],
   providers: [RoomService],

@@ -13,13 +13,20 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
+selectTab(arg0: string) {
+throw new Error('Method not implemented.');
+}
   users: any[] = [];
   rooms: any[] = [];
+  p: number=1;
+  pRoom: number=1;
+  currentTab: string = 'userManagement'; 
   showAddUserModal: boolean = false;
   showEditUserModal: boolean = false;
-  newUser: any = { id: '', email: '', name: '', password: '', user_role: '' };
+  newUser: any = { id: '', email: '', name: '', password: 'password', user_role: '' };
   showAddRoomModal: boolean = false;
   newRoom: any = { roomType: '', price: 0 };
+activeTab: any;
 
   constructor(
     private roomService: RoomService,
@@ -37,12 +44,16 @@ export class AdminDashboardComponent implements OnInit {
     this.loadUsers();
   }
 
-  // Kullanıcı ekleme ve düzenleme için modal açma
-  openAddUserModal(): void {
-    this.showEditUserModal = false;  // Yeni kullanıcı eklerken düzenleme modunu kapatıyoruz
-    this.showAddUserModal = true;    // Yeni kullanıcı ekleme modalını açıyoruz
-    this.newUser = { id: '', email: '', name: '', password: '', userRole: '' };
+  // Sekme değiştirme
+  changeTab(tabName: string): void {
+    this.currentTab = tabName;
   }
+
+// Kullanıcı ekleme ve düzenleme için modal açma
+openAddUserModal(): void {
+  this.newUser = { id: 0, email: '', username: '', password: 'password', userRole: '' };
+  this.showAddUserModal = true; // Modal'ı açıyoruz
+}
 
 
   // Kullanıcı düzenleme için modal açma
