@@ -185,20 +185,29 @@
   <pagination-controls (pageChange)="p = $event"></pagination-controls>
 </div>
 
-  <!-- Oda ekleme modalı -->
-  <div *ngIf="showAddRoomModal" class="modal">
-    <div class="modal-content">
-      <span class="close" (click)="closeModal()">&times;</span>
-      <h2>Add New Room</h2>
-      <form (ngSubmit)="addRoom()">
-        <label for="roomType">Room Type:</label>
-        <input type="text" [(ngModel)]="newRoom.roomType" name="roomType" required />
-        
-        <label for="price">Price:</label>
-        <input type="number" [(ngModel)]="newRoom.price" name="price" required />
-        
-        <button type="submit">Add Room</button>
-        <button type="button" (click)="closeModal()">Cancel</button>
-      </form>
-    </div>
+ <!-- Oda ekleme modalı -->
+<div *ngIf="showAddRoomModal" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <h2>Add New Room</h2>
+    <form (ngSubmit)="addRoom()">
+      <label for="roomType">Room Type:</label>
+      <input type="text" id="roomType" [(ngModel)]="newRoom.roomType" name="roomType" required />
+
+      <label for="guestCount">Guest Count:</label>
+      <input type="number" id="guestCount" [(ngModel)]="newRoom.guestCount" name="guestCount" required />
+
+      <label for="price">Price:</label>
+      <input type="number" id="price" [(ngModel)]="newRoom.price" name="price" required />
+
+      <label for="startDate">Start Date:</label>
+      <input type="date" id="startDate" [(ngModel)]="newRoom.startDate" name="startDate" required />
+
+      <label for="endDate">End Date:</label>
+      <input type="date" id="endDate" [(ngModel)]="newRoom.endDate" name="endDate" required />
+
+      <button type="submit">Add Room</button>
+      <button type="button" (click)="closeModal()">Cancel</button>
+    </form>
   </div>
+</div>

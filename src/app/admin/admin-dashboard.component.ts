@@ -111,11 +111,17 @@ openAddUserModal(): void {
 
   // Oda ekleme
   addRoom(): void {
+    console.log('Adding room:', this.newRoom);  // Oda eklemek için konsola yazdırıyoruz
+
     this.roomService.addRoom(this.newRoom).subscribe((room) => {
       this.rooms.push(room);
-      this.newRoom = { roomType: '', price: 0 };
+      this.newRoom = { roomType: '',guestCount:0,price: 0, startDate: '', endDate: '' };  // Yeni oda eklemek için formu sıfırlıyoruz
       this.closeModal();
-    });
+      console.log('Room added successfully:', room);
+    }, (error) => {
+      console.error('Error adding room:', error);
+    }
+    );
   }
 
   editRoom(): void {
