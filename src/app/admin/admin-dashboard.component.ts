@@ -14,6 +14,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AdminDashboardComponent implements OnInit {
 currentAdminEmail: any;
+room: any;
 selectTab(arg0: string) {
 throw new Error('Method not implemented.');
 }
@@ -36,6 +37,11 @@ activeTab: any;
     private router: Router,
     private http: HttpClient
   ) {}
+
+
+  // Modals
+  showEditRoomModal: boolean = false; // Add the property for edit room modal
+
 
   ngOnInit(): void {
     if (!this.authService.isAdmin()) {
@@ -69,12 +75,6 @@ openAddUserModal(): void {
     this.newRoom = { roomType: '', price: 0 };  // Yeni oda eklerken formu sıfırla
   }
 
-  // Modal'ı kapatma
-  closeModal(): void {
-    this.showAddUserModal = false;
-    this.showEditUserModal = false;
-    this.showAddRoomModal = false;
-  }
 
   // Kullanıcı ekleme
   addUser() {
@@ -118,25 +118,63 @@ openAddUserModal(): void {
     });
   }
 
-  // Oda düzenleme
-  editRoom(roomId: number): void {
-    const updatedRoom = {
-      roomType: 'Deluxe',
-      price: 200
-    };
-    this.roomService.updateRoom(roomId, updatedRoom).subscribe((room) => {
-      const index = this.rooms.findIndex(r => r.id === roomId);
-      if (index !== -1) {
-        this.rooms[index] = room;
-      }
-    });
+  editRoom(): void {
+    console.log('Editing room with data:', this.newRoom);  // Odanın bilgilerini kontrol et
+  
+    if (this.newRoom.id) {
+      this.roomService.updateRoom(this.newRoom.id, this.newRoom).subscribe(
+        (updatedRoom) => {
+          const index = this.rooms.findIndex(room => room.id === updatedRoom.id);
+          if (index !== -1) {
+            this.rooms[index] = updatedRoom;  // Odayı güncelliyoruz
+          }
+          console.log('Room updated successfully:', updatedRoom);
+          this.closeModal();  // Modalı kapatıyoruz
+        },
+        (error) => {
+          console.error('Error updating room:', error);
+        }
+      );
+    } else {
+      console.error('Room ID is missing or invalid:', this.newRoom.id);  // Hata mesajı ver
+    }
   }
 
-  // Oda silme
+
+// Open edit room modal with room details
+openEditRoomModal(room: Room): void {
+  console.log('Room data before modal:', this.room);  // Odayı modal açılmadan önce konsola yazdırıyoruz
+  this.showEditRoomModal = true;
+  this.newRoom = { ...room };  // Seçilen odayı modalda göstermek için
+  console.log('Room data after modal:', this.newRoom);  // Odanın bilgilerini kontrol et
+}
+
+// Modal'ı kapatma
+closeModal(): void {
+  this.showAddUserModal = false;
+  this.showEditUserModal = false;
+  this.showAddRoomModal = false;
+  this.showEditRoomModal = false;
+}
+
+
+
   deleteRoom(roomId: number): void {
-    this.roomService.deleteRoom(roomId).subscribe(() => {
-      this.rooms = this.rooms.filter(room => room.id !== roomId);
-    });
+    console.log('Deleting Room with ID: ', roomId); // Silinen odanın ID'sini konsola yazdırıyoruz
+    if (roomId === undefined || roomId === null) {
+      console.error('Room ID is undefined or null');
+      return;  // Eğer roomId undefined veya null ise, işlemi sonlandırıyoruz
+    }
+  
+    this.roomService.deleteRoom(roomId).subscribe(
+      () => {
+        // Silme işlemi başarılıysa, odalar listesinde gerekli güncellemeleri yap
+        this.rooms = this.rooms.filter(room => room.id !== roomId);
+      },
+      (error) => {
+        console.error('Error deleting room:', error);
+      }
+    );
   }
 
 // Kullanıcı bilgilerini güncellemek için
@@ -189,6 +227,7 @@ saveUser(): void {
   loadRooms(): void {
     this.roomService.getRooms().subscribe((rooms: Room[]) => {
       this.rooms = rooms;
+      console.log('Rooms:', this.rooms);
     });
   }
 
