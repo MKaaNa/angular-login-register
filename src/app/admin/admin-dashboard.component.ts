@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
+currentAdminEmail: any;
 selectTab(arg0: string) {
 throw new Error('Method not implemented.');
 }
@@ -44,10 +45,11 @@ activeTab: any;
     this.loadUsers();
   }
 
-  // Sekme değiştirme
-  changeTab(tabName: string): void {
-    this.currentTab = tabName;
+  // Sekme değiştirme fonksiyonu
+  changeTab(tab: string): void {
+    this.currentTab = tab;
   }
+
 
 // Kullanıcı ekleme ve düzenleme için modal açma
 openAddUserModal(): void {

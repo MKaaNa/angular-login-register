@@ -1,10 +1,21 @@
 <div class="admin-dashboard">
     <h2>Admin Dashboard</h2>
   
+      <!-- Hoşgeldin mesajı -->
+  <div class="welcome-message">
+    Welcome, {{ 'Admin' }}!
+  </div>
 
   <!-- Kullanıcılar Tablosu -->
 <div class="tab-content" [ngClass]="{active: currentTab === 'userManagement'}">
   <h3>User Management</h3>
+
+<!-- Sekme Başlıkları (Butonlar) -->
+<div class="tabs">
+  <button (click)="changeTab('roomManagement')">Room Management</button>
+</div>
+
+
   <button (click)="openAddUserModal()">Add New User</button>
   <table class="table">
     <thead>
@@ -103,30 +114,62 @@
     </div>
   </div>
     <button class="btn-logout" (click)="logout()">Logout</button>
-  
-   <!-- Room Management Tablo İçeriği -->
-   <div class="tab-content" [ngClass]="{ active: currentTab === 'roomManagement' }">
-    <h3>Room Management</h3>
-    <button (click)="openAddRoomModal()">Add New Room</button>
+    
+    
 
-    <!-- Oda Listesi -->
-    <table class="room-table">
-      <thead>
-        <tr>
-          <th>Room Type</th>
-          <th>Price</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let room of rooms">
-          <td>{{ room.roomType }}</td>
-          <td>{{ room.price }}</td>
-          <td>
-            <button (click)="editRoom(room.id)">Edit</button>
-            <button (click)="deleteRoom(room.id)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    
+  <!-- Room Management Sekmesi -->
+  <div class="tab-content" [ngClass]="{ active: currentTab === 'roomManagement' }">
+    <h3>Room Management</h3>
+
+    <div class="room-management-actions">
+        <button (click)="openAddRoomModal()" class="add-room-btn">Add New Room</button>
+        <button (click)="changeTab('userManagement')" class="back-btn">← Back to User Management</button>
+    </div>
+
+  <!-- Oda Listesi -->
+  <table class="room-table">
+    <thead>
+      <tr>
+        <th>Room Type</th>
+        <th>Price</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let room of rooms | paginate: { itemsPerPage: 5, currentPage: p }">
+        <td>{{ room.roomType }}</td>
+        <td>{{ room.price }}</td>
+        <td>{{ room.startDate | date:'shortDate' }}</td>
+        <td>{{ room.endDate | date:'shortDate' }}</td>
+        <td>
+          <button (click)="editRoom(room.id)">Edit</button>
+          <button (click)="deleteRoom(room.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Sayfalama -->
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+
+  <!-- Oda ekleme modalı -->
+  <div *ngIf="showAddRoomModal" class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <h2>Add New Room</h2>
+      <form (ngSubmit)="addRoom()">
+        <label for="roomType">Room Type:</label>
+        <input type="text" [(ngModel)]="newRoom.roomType" name="roomType" required />
+        
+        <label for="price">Price:</label>
+        <input type="number" [(ngModel)]="newRoom.price" name="price" required />
+        
+        <button type="submit">Add Room</button>
+        <button type="button" (click)="closeModal()">Cancel</button>
+      </form>
+    </div>
   </div>
