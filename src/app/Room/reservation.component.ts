@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RoomService } from '../Room/room.service';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../_services/auth.service';  // Import AuthService
+import { Router } from '@angular/router';  // Import Router
 
 @Component({
   selector: 'app-reservation',
@@ -8,12 +10,6 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./reservation.component.css'],
 })
 export class ReservationComponent implements OnInit {
-previousPage() {
-throw new Error('Method not implemented.');
-}
-nextPage() {
-throw new Error('Method not implemented.');
-}
   selectedRoomType: string = '';  
   selectedGuestCount: number = 1;  
   startDate: string = '';  
@@ -26,32 +22,50 @@ throw new Error('Method not implemented.');
   imageIndex: number = 0;  
   errorMessage: string = '';  
   filterByDateRange: boolean = false;
-paginatedRooms: any;
-currentPage: any;
-totalPages: any;
+  paginatedRooms: any;
+  currentPage: any;
+  totalPages: any;
 
-  constructor(private roomService: RoomService, private http: HttpClient) { }
 
-  ngOnInit(): void {}
+  constructor(
+    private roomService: RoomService, 
+    private http: HttpClient,
+    private authService: AuthService,  // Inject AuthService
+    private router: Router  // Inject Router
+  ) { }
 
-  
-  getAvailableRooms(roomType: string, guestCount: number, startDate: string, endDate: string): void {
-  this.roomService.getAvailableRooms(roomType, guestCount, startDate, endDate)
-    .subscribe(
-      (rooms: any[]) => {
-        this.rooms = rooms;
-        if (rooms.length === 0) {
-          this.showNoRoomsPopup = true;
-        } else {
-          this.showNoRoomsPopup = false;
-        }
-      },
-      (error: any) => {
-        console.error('Error fetching available rooms', error);
-        this.showNoRoomsPopup = true;
-      }
-    );
+  ngOnInit(): void {  }
+
+
+ // Check if the user is an admin
+ isAdmin(): boolean {
+  return this.authService.isAdmin();  // Call the isAdmin method from AuthService
 }
+
+
+// Admin dashboard'a gitme
+goToAdminDashboard(): void {
+  this.router.navigate(['/admin-dashboard']);
+}
+
+  // Oda almak için API'yi çağırma
+  getAvailableRooms(roomType: string, guestCount: number, startDate: string, endDate: string): void {
+    this.roomService.getAvailableRooms(roomType, guestCount, startDate, endDate)
+      .subscribe(
+        (rooms: any[]) => {
+          this.rooms = rooms;
+          if (rooms.length === 0) {
+            this.showNoRoomsPopup = true;
+          } else {
+            this.showNoRoomsPopup = false;
+          }
+        },
+        (error: any) => {
+          console.error('Error fetching available rooms', error);
+          this.showNoRoomsPopup = true;
+        }
+      );
+  }
 
   // Tarih aralığına göre filtreleme
   getAvailableRoomsWithDateRange(roomType: string, guestCount: number, startDate: string, endDate: string): void {
@@ -105,7 +119,7 @@ totalPages: any;
     this.showRoomDetailsPopup = true;
   }
 
-// Sıralama fonksiyonu
+  // Sıralama fonksiyonu
   sortByColumn(column: string): void {
     this.rooms.sort((a, b) => {
       if (column === 'price') {
@@ -118,7 +132,6 @@ totalPages: any;
       return 0;
     });
   }
-
 
   // Resim değiştirme işlevi
   changeImage(direction: number): void {

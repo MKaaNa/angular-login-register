@@ -109,6 +109,9 @@
         </div>
     </div>
 
+    <!-- Button to go back to Admin Dashboard, visible only for admins -->
+    <button *ngIf="isAdmin()" class="btn-admin-dashboard" (click)="goToAdminDashboard()">Go to Admin Dashboard</button>
+
     <!-- Hata mesajı varsa -->
     <div *ngIf="errorMessage">
         <p>{{ errorMessage }}</p>

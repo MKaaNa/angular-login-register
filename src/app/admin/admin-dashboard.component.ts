@@ -7,28 +7,25 @@ import { AuthService } from '../_services/auth.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
+
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css']
 })
+
 export class AdminDashboardComponent implements OnInit {
-currentAdminEmail: any;
-room: any;
-selectTab(arg0: string) {
-throw new Error('Method not implemented.');
-}
   users: any[] = [];
   rooms: any[] = [];
-  p: number=1;
-  pRoom: number=1;
+  p: number = 1;
+  pRoom: number = 1;
   currentTab: string = 'userManagement'; 
   showAddUserModal: boolean = false;
   showEditUserModal: boolean = false;
   newUser: any = { id: '', email: '', name: '', password: 'password', user_role: '' };
   showAddRoomModal: boolean = false;
+  showEditRoomModal: boolean = false; // Add the property for edit room modal
   newRoom: any = { roomType: '', price: 0 };
-activeTab: any;
 
   constructor(
     private roomService: RoomService,
@@ -37,10 +34,6 @@ activeTab: any;
     private router: Router,
     private http: HttpClient
   ) {}
-
-
-  // Modals
-  showEditRoomModal: boolean = false; // Add the property for edit room modal
 
 
   ngOnInit(): void {
@@ -56,13 +49,11 @@ activeTab: any;
     this.currentTab = tab;
   }
 
-
-// Kullanıcı ekleme ve düzenleme için modal açma
-openAddUserModal(): void {
-  this.newUser = { id: 0, email: '', username: '', password: 'password', userRole: '' };
-  this.showAddUserModal = true; // Modal'ı açıyoruz
-}
-
+  // Kullanıcı ekleme ve düzenleme için modal açma
+  openAddUserModal(): void {
+    this.newUser = { id: 0, email: '', username: '', password: 'password', userRole: '' };
+    this.showAddUserModal = true; // Modal'ı açıyoruz
+  }
 
   // Kullanıcı düzenleme için modal açma
   openEditUserModal(user: User): void {
@@ -74,7 +65,6 @@ openAddUserModal(): void {
     this.showAddRoomModal = true;
     this.newRoom = { roomType: '', price: 0 };  // Yeni oda eklerken formu sıfırla
   }
-
 
   // Kullanıcı ekleme
   addUser() {
@@ -115,7 +105,7 @@ openAddUserModal(): void {
 
     this.roomService.addRoom(this.newRoom).subscribe((room) => {
       this.rooms.push(room);
-      this.newRoom = { roomType: '',guestCount:0,price: 0, startDate: '', endDate: '' };  // Yeni oda eklemek için formu sıfırlıyoruz
+      this.newRoom = { roomType: '', guestCount: 0, price: 0, startDate: '', endDate: '' };  // Yeni oda eklemek için formu sıfırlıyoruz
       this.closeModal();
       console.log('Room added successfully:', room);
     }, (error) => {
@@ -126,7 +116,7 @@ openAddUserModal(): void {
 
   editRoom(): void {
     console.log('Editing room with data:', this.newRoom);  // Odanın bilgilerini kontrol et
-  
+
     if (this.newRoom.id) {
       this.roomService.updateRoom(this.newRoom.id, this.newRoom).subscribe(
         (updatedRoom) => {
@@ -146,24 +136,21 @@ openAddUserModal(): void {
     }
   }
 
+  // Open edit room modal with room details
+  openEditRoomModal(room: Room): void {
+    console.log('Room data before modal:', room);  // Odayı modal açılmadan önce konsola yazdırıyoruz
+    this.showEditRoomModal = true;
+    this.newRoom = { ...room };  // Seçilen odayı modalda göstermek için
+    console.log('Room data after modal:', this.newRoom);  // Odanın bilgilerini kontrol et
+  }
 
-// Open edit room modal with room details
-openEditRoomModal(room: Room): void {
-  console.log('Room data before modal:', this.room);  // Odayı modal açılmadan önce konsola yazdırıyoruz
-  this.showEditRoomModal = true;
-  this.newRoom = { ...room };  // Seçilen odayı modalda göstermek için
-  console.log('Room data after modal:', this.newRoom);  // Odanın bilgilerini kontrol et
-}
-
-// Modal'ı kapatma
-closeModal(): void {
-  this.showAddUserModal = false;
-  this.showEditUserModal = false;
-  this.showAddRoomModal = false;
-  this.showEditRoomModal = false;
-}
-
-
+  // Modal'ı kapatma
+  closeModal(): void {
+    this.showAddUserModal = false;
+    this.showEditUserModal = false;
+    this.showAddRoomModal = false;
+    this.showEditRoomModal = false;
+  }
 
   deleteRoom(roomId: number): void {
     console.log('Deleting Room with ID: ', roomId); // Silinen odanın ID'sini konsola yazdırıyoruz
@@ -171,7 +158,7 @@ closeModal(): void {
       console.error('Room ID is undefined or null');
       return;  // Eğer roomId undefined veya null ise, işlemi sonlandırıyoruz
     }
-  
+
     this.roomService.deleteRoom(roomId).subscribe(
       () => {
         // Silme işlemi başarılıysa, odalar listesinde gerekli güncellemeleri yap
@@ -183,45 +170,48 @@ closeModal(): void {
     );
   }
 
-// Kullanıcı bilgilerini güncellemek için
-updateUser(): void {
-  if (this.newUser.id) {
-    this.userService.updateUser(this.newUser).subscribe(
-      (updatedUser) => {
-        // Güncellenen user'ı listede de güncelle
+  // Kullanıcı bilgilerini güncellemek için
+  updateUser(): void {
+    if (this.newUser.id) {
+      this.userService.updateUser(this.newUser).subscribe(
+        (updatedUser) => {
+          // Güncellenen user'ı listede de güncelle
+          const index = this.users.findIndex(u => u.id === updatedUser.id);
+          if (index !== -1) {
+            this.users[index] = updatedUser;
+          }
+          this.closeModal();
+        },
+        error => {
+          console.error('Update failed:', error);
+        }
+      );
+    }
+  }
+
+  saveUser(): void {
+    if (this.newUser.id) {
+      // Kullanıcıyı güncelleme
+      this.userService.updateUser(this.newUser).subscribe((updatedUser: User) => {
         const index = this.users.findIndex(u => u.id === updatedUser.id);
         if (index !== -1) {
           this.users[index] = updatedUser;
         }
         this.closeModal();
-      },
-      error => {
-        console.error('Update failed:', error);
-      }
-    );
+      });
+    } else {
+      // Yeni kullanıcı ekleme
+      this.userService.addUser(this.newUser).subscribe((newUser: User) => {
+        this.users.push(newUser);
+        this.newUser = { id: '', email: '', name: '', password: '', userRole: '' };  // Yeni kullanıcıyı sıfırla
+        this.closeModal();
+      });
+    }
   }
-}
 
-saveUser(): void {
-  if (this.newUser.id) {
-    // Kullanıcıyı güncelleme
-    this.userService.updateUser(this.newUser).subscribe((updatedUser: User) => {
-      const index = this.users.findIndex(u => u.id === updatedUser.id);
-      if (index !== -1) {
-        this.users[index] = updatedUser;
-      }
-      this.closeModal();
-    });
-  } else {
-    // Yeni kullanıcı ekleme
-    this.userService.addUser(this.newUser).subscribe((newUser: User) => {
-      this.users.push(newUser);
-      this.newUser = { id: '', email: '', name: '', password: '', userRole: '' };  // Yeni kullanıcıyı sıfırla
-      this.closeModal();
-    });
-  }
-}
 
+
+  
   // Kullanıcıları yükleme
   loadUsers(): void {
     this.userService.getUsers().subscribe((users: User[]) => {
@@ -233,8 +223,12 @@ saveUser(): void {
   loadRooms(): void {
     this.roomService.getRooms().subscribe((rooms: Room[]) => {
       this.rooms = rooms;
-      console.log('Rooms:', this.rooms);
     });
+  }
+
+  // Rezervasyon sayfasına yönlendirme fonksiyonu
+  goToReservation(): void {
+    this.router.navigate(['/reservation']);  // '/reservation' URL'sine yönlendirme yapıyoruz
   }
 
   // Logout işlemi
@@ -243,4 +237,3 @@ saveUser(): void {
     this.router.navigate(['/login']);  // Login sayfasına yönlendir
   }
 }
-//

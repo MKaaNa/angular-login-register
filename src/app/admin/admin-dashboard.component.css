@@ -170,6 +170,71 @@
   background-color: #da190b;
 }
 
+
+/* GoTo Reservation Button */
+.btn-reservation {
+  background-color: #4CAF50;  /* Yeşil renk */
+  color: white;               /* Yazı rengi beyaz */
+  padding: 12px 30px;         /* Dikey ve yatay boşluklar */
+  border-radius: 50px;        /* Köşeleri yuvarla */
+  font-size: 16px;            /* Yazı büyüklüğü */
+  font-weight: bold;          /* Yazı kalın */
+  text-transform: uppercase;  /* Yazıyı büyük harfe dönüştür */
+  border: none;               /* Kenarlık yok */
+  cursor: pointer;           /* İmleç, tıklanabilir olduğunu gösterir */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* Gölgelendirme */
+  transition: all 0.3s ease;  /* Geçiş animasyonu */
+}
+
+/* Hover Effect */
+.btn-reservation:hover {
+  background-color: #45a049;  /* Hoverda biraz daha koyu bir yeşil */
+  transform: scale(1.05);      /* Hoverda buton büyür */
+}
+
+/* Focus Effect */
+.btn-reservation:focus {
+  outline: none;              /* Odaklandığında kenarlık yok */
+  box-shadow: 0 0 15px rgba(72, 128, 36, 0.8); /* Focusda yeşil bir kenarlık */
+}
+
+/* Active Effect */
+.btn-reservation:active {
+  transform: scale(0.98);     /* Tıklama anında buton biraz küçülür */
+}
+
+/* Modern Back to Admin Dashboard Button */
+.btn-back-dashboard {
+  background-color: #f44336;  /* Kırmızı renk */
+  color: white;               /* Yazı rengi beyaz */
+  padding: 12px 30px;         /* Dikey ve yatay boşluklar */
+  border-radius: 50px;        /* Köşeleri yuvarla */
+  font-size: 16px;            /* Yazı büyüklüğü */
+  font-weight: bold;          /* Yazı kalın */
+  text-transform: uppercase;  /* Yazıyı büyük harfe dönüştür */
+  border: none;               /* Kenarlık yok */
+  cursor: pointer;           /* İmleç, tıklanabilir olduğunu gösterir */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* Gölgelendirme */
+  transition: all 0.3s ease;  /* Geçiş animasyonu */
+}
+
+/* Hover Effect */
+.btn-back-dashboard:hover {
+  background-color: #d32f2f;  /* Hoverda biraz daha koyu bir kırmızı */
+  transform: scale(1.05);      /* Hoverda buton büyür */
+}
+
+/* Focus Effect */
+.btn-back-dashboard:focus {
+  outline: none;              /* Odaklandığında kenarlık yok */
+  box-shadow: 0 0 15px rgba(211, 47, 47, 0.8); /* Focusda kırmızı bir kenarlık */
+}
+
+/* Active Effect */
+.btn-back-dashboard:active {
+  transform: scale(0.98);     /* Tıklama anında buton biraz küçülür */
+}
+
 /* Geri Dönme Butonu */
 .back-button {
   margin-bottom: 20px;
