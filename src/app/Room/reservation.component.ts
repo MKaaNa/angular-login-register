@@ -27,7 +27,7 @@ export class ReservationComponent implements OnInit {
   paginatedRooms: any;
   currentPage: any;
   totalPages: any;
-
+  calculatedPrice: number | null = null;  // Hesaplanan toplam ücreti tutacak değişken
   selectedRoomId: number = 0;  // Seçilen odanın ID'si
 
   constructor(
@@ -111,6 +111,45 @@ export class ReservationComponent implements OnInit {
 
     this.showRoomDetailsPopup = true;
   }
+ // Otomatik olarak gün sayısı ve oda fiyatı baz alınarak toplam ücreti hesapla
+ updateUserPrice(): void {
+  if (this.startDate && this.endDate && this.selectedRoomDetails && this.selectedRoomDetails.price) {
+    const start = new Date(this.startDate);
+    const end = new Date(this.endDate);
+    // Farkı milisaniye cinsinden hesaplayın
+    const diffTime = end.getTime() - start.getTime();
+    // Gün sayısını hesaplayın; eğer fark 0 veya negatifse, 1 gün kabul edelim
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays <= 0) {
+      diffDays = 1;
+    }
+    // Toplam fiyat = gün sayısı * günlük fiyat
+    this.calculatedPrice = diffDays * this.selectedRoomDetails.price;
+  } else {
+    this.calculatedPrice = null;
+  }
+}
+
+
+  // Yeni metod: Fiyatı hesapla
+calculatePrice(): void {
+  const priceCalculationRequest = {
+    roomId: this.selectedRoomId, // Kullanıcı, Available Rooms listesinden seçtiği odanın ID'sini atamalı
+    startDate: this.startDate,   // "yyyy-MM-dd" formatında
+    endDate: this.endDate        // "yyyy-MM-dd" formatında
+  };
+  this.http.post<number>('/api/reservations/calculate-price', priceCalculationRequest)
+    .subscribe(
+      (price: number) => {
+        this.calculatedPrice = price;
+        console.log('Calculated Price:', price);
+      },
+      (error) => {
+        console.error('Error calculating price:', error);
+        this.calculatedPrice = null;
+      }
+    );
+}
 
   // Rezervasyon oluşturma
   createReservation(): void {

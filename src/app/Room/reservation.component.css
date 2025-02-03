@@ -79,30 +79,30 @@ input, select {
 
 /* Popup Modal: Odalar bulunamazsa veya detayları gösteren popup */
 .popup {
-  position: fixed;              /* Sayfa kaydırmasından bağımsız sabit konum */
-  top: 5%;                     /* Ekranın üstünden %5 boşluk bırak (daha yukarı alındı) */
-  left: 50%;                   /* Yatayda ortalamak için */
-  transform: translateX(-50%); /* Yatay ortalamayı tamamlar */
-  z-index: 1000;               /* Diğer içeriklerin üzerinde görünecek */
-  width: 80%;                  /* İsteğe bağlı genişlik ayarı */
-  max-width: 500px;            /* Maksimum genişlik sınırı */
-  background-color: white;     /* Arka plan rengi */
-  padding: 20px;               /* İç boşluk */
-  border-radius: 5px;          /* Köşe yuvarlama */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Gölge efekti */
-  max-height: 90vh;            /* Maksimum yükseklik, viewport yüksekliğinin %90'ı */
-  overflow-y: auto;            /* İçerik taşarsa kaydırma ekle */
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: 80%;
+  max-width: 500px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 /* Animasyon */
 @keyframes popupAnim {
   0% {
     opacity: 0;
-    transform: translateX(-50%) scale(0.5); /* Başlangıçta küçülmüş ve görünmez */
+    transform: translateX(-50%) scale(0.5);
   }
   100% {
     opacity: 1;
-    transform: translateX(-50%) scale(1); /* Son durumda normal boyut ve görünür */
+    transform: translateX(-50%) scale(1);
   }
 }
 
@@ -128,31 +128,31 @@ input, select {
 }
 
 .popup-close:hover {
-  color: #e74c3c;  /* Hoverda kırmızıya dönsün */
+  color: #e74c3c;
 }
 
 /* Buton stilini modernleştir */
 button {
-  background-color: #4CAF50; /* Yeşil arka plan */
+  background-color: #4CAF50;
   color: white;
   padding: 12px 20px;
   border: none;
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
-  width: 20%; /* Butonlar tam genişlikte olsun */
+  width: 20%;
   transition: background-color 0.3s;
   margin-top: 10px;
 }
 
 button:hover {
-  background-color: #45a049; /* Hover efekti */
+  background-color: #45a049;
 }
 
 /* Grid düzeni için ayarlar */
 .room-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Ekran boyutuna göre odaları ayarla */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   padding: 20px;
   margin-top: 20px;
@@ -178,13 +178,13 @@ button:hover {
 .room-card p {
   margin-bottom: 10px;
   font-size: 16px;
-  text-align: left;  /* Tarihlerin sola hizalanması için */
+  text-align: left;
 }
 
 /* Tarih başlıklarını belirginleştirmek */
 .room-card p strong {
   font-weight: bold;
-  color: #4CAF50; /* Yeşil renk */
+  color: #4CAF50;
 }
 
 /* Hoverda oda kartı biraz büyüsün */
@@ -202,7 +202,7 @@ button:hover {
 
 /* "About" butonunu modernleştirelim */
 .room-card button {
-  background-color: #3498db; /* Mavi arka plan */
+  background-color: #3498db;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
@@ -213,7 +213,7 @@ button:hover {
 }
 
 .room-card button:hover {
-  background-color: #2980b9; /* Hoverda renk değişimi */
+  background-color: #2980b9;
 }
 
 /* Odalar yoksa mesaj */
@@ -280,13 +280,13 @@ label {
 /* Modern Tablo Stil */
 .room-table {
   width: 100%;
-  max-width: 1200px; /* Tabloyu ekran boyutlarına göre sınırla */
+  max-width: 1200px;
   border-collapse: collapse;
   margin-top: 20px;
   background-color: #ffffff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  overflow: hidden; /* Kenarları yuvarlatılmış yaparak taşma engellenir */
+  overflow: hidden;
 }
 
 .room-table th, .room-table td {

@@ -209,9 +209,62 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-
-
+  updateDefaultPrice(): void {
+    if (this.newRoom.roomType) {
+      // Eğer fiyat alanı henüz elle değiştirilmemişse (örneğin, 0 ya da boş)
+      // otomatik olarak varsayılan değeri ata.
+      switch (this.newRoom.roomType.toLowerCase()) {
+        case 'single':
+          this.newRoom.price = 350;
+          break;
+        case 'double':
+          this.newRoom.price = 450;
+          break;
+        case 'suite':
+          this.newRoom.price = 800;
+          break;
+        default:
+          this.newRoom.price = 0;
+      }
+    }
+  }
   
+
+// Fiyatı güncelleyen metot
+updateTotalPrice(): void {
+  if (this.newRoom.roomType && this.newRoom.startDate && this.newRoom.endDate) {
+    // Öncelikle oda tipine göre günlük fiyatı belirleyelim.
+    let dailyPrice = 0;
+    switch (this.newRoom.roomType.toLowerCase()) {
+      case 'single':
+        dailyPrice = 350;
+        break;
+      case 'double':
+        dailyPrice = 450;
+        break;
+      case 'suite':
+        dailyPrice = 800;
+        break;
+      default:
+        dailyPrice = 0;
+    }
+    
+    // Tarihleri Date objesine dönüştürün
+    const start = new Date(this.newRoom.startDate);
+    const end = new Date(this.newRoom.endDate);
+    
+    // Tarih farkını gün cinsinden hesaplayın
+    let diffTime = end.getTime() - start.getTime();
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays <= 0) {
+      diffDays = 1; // En az 1 gün
+    }
+    
+    // Toplam fiyatı hesapla: günlük fiyat × gün sayısı
+    this.newRoom.price = dailyPrice * diffDays;
+  }
+} 
+
   // Kullanıcıları yükleme
   loadUsers(): void {
     this.userService.getUsers().subscribe((users: User[]) => {

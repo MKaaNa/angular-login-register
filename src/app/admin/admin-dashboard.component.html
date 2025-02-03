@@ -185,26 +185,37 @@
   <pagination-controls (pageChange)="p = $event"></pagination-controls>
 </div>
 
- <!-- Oda ekleme modalı -->
+<!-- Oda ekleme modalı -->
 <div *ngIf="showAddRoomModal" class="modal">
   <div class="modal-content">
     <span class="close" (click)="closeModal()">&times;</span>
     <h2>Add New Room</h2>
     <form (ngSubmit)="addRoom()">
+      <!-- Oda Tipi -->
       <label for="roomType">Room Type:</label>
-      <input type="text" id="roomType" [(ngModel)]="newRoom.roomType" name="roomType" required />
-
+      <select id="roomType" [(ngModel)]="newRoom.roomType" name="roomType" required (ngModelChange)="updateTotalPrice()">
+        <option value="">-- Select Room Type --</option>
+        <option value="single">Single</option>
+        <option value="double">Double</option>
+        <option value="suite">Suite</option>
+      </select>
+      
+      <!-- Misafir Sayısı -->
       <label for="guestCount">Guest Count:</label>
       <input type="number" id="guestCount" [(ngModel)]="newRoom.guestCount" name="guestCount" required />
 
-      <label for="price">Price:</label>
-      <input type="number" id="price" [(ngModel)]="newRoom.price" name="price" required />
-
+      <!-- Başlangıç Tarihi -->
       <label for="startDate">Start Date:</label>
-      <input type="date" id="startDate" [(ngModel)]="newRoom.startDate" name="startDate" required />
+      <input type="date" id="startDate" [(ngModel)]="newRoom.startDate" name="startDate" required (ngModelChange)="updateTotalPrice()">
 
+      <!-- Bitiş Tarihi -->
       <label for="endDate">End Date:</label>
-      <input type="date" id="endDate" [(ngModel)]="newRoom.endDate" name="endDate" required />
+      <input type="date" id="endDate" [(ngModel)]="newRoom.endDate" name="endDate" required (ngModelChange)="updateTotalPrice()">
+
+      <!-- Fiyat (Toplam Ücret) -->
+      <label for="price">Total Price:</label>
+      <!-- Bu alan otomatik doldurulacak; admin isterse düzenleyebilir -->
+      <input type="number" id="price" [(ngModel)]="newRoom.price" name="price" required />
 
       <button type="submit">Add Room</button>
       <button type="button" (click)="closeModal()">Cancel</button>

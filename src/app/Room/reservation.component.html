@@ -71,7 +71,7 @@
         <div class="room-card" *ngFor="let room of rooms">
           <h3>{{ room.roomType | titlecase }}</h3>
           <p><strong>Guests:</strong> {{ room.guestCount }}</p>
-          <p><strong>Price:</strong> ${{ room.price }}</p>
+          <p><strong>Price:</strong> {{ room.price | currency }}</p>
           <p><strong>Start Date:</strong> {{ room.startDate | date: 'shortDate' }}</p>
           <p><strong>End Date:</strong> {{ room.endDate | date: 'shortDate' }}</p>
           <button (click)="showRoomDetails(room)">About</button>
@@ -92,7 +92,7 @@
       <div class="popup-content">
         <span class="popup-close" (click)="closeRoomDetailsPopup()">×</span>
         <h3>{{ selectedRoomDetails?.roomType | titlecase }} Room</h3>
-  
+        
         <!-- Image slider (Resimler arası geçiş için)-->
         <div class="image-slider" *ngIf="selectedRoomDetails?.images?.length > 0">
           <button class="slider-button left" (click)="changeImage(-1)">&#10094;</button>
@@ -100,12 +100,12 @@
                alt="Room Image" class="popup-room-image">
           <button class="slider-button right" (click)="changeImage(1)">&#10095;</button>
         </div>
-  
+        
         <!-- Eğer resim yoksa uyarı mesajı -->
         <div *ngIf="imageIndex < 0">
           <p>No images available for this room.</p>
         </div>
-  
+        
         <p>{{ selectedRoomDetails?.description }}</p>
         
         <!-- Rezervasyon formu: Oda detaylarını görüntüledikten sonra rezerve et butonu -->
@@ -113,11 +113,15 @@
           <h4>Reserve this Room</h4>
           <div>
             <label for="popupStartDate">Start Date:</label>
-            <input type="date" id="popupStartDate" [(ngModel)]="startDate" name="popupStartDate">
+            <input type="date" id="popupStartDate" [(ngModel)]="startDate" name="popupStartDate"
+                   [min]="selectedRoomDetails?.startDate" [max]="selectedRoomDetails?.endDate"
+                   (ngModelChange)="updateUserPrice()">
           </div>
           <div>
             <label for="popupEndDate">End Date:</label>
-            <input type="date" id="popupEndDate" [(ngModel)]="endDate" name="popupEndDate">
+            <input type="date" id="popupEndDate" [(ngModel)]="endDate" name="popupEndDate"
+                   [min]="startDate" [max]="selectedRoomDetails?.endDate"
+                   (ngModelChange)="updateUserPrice()">
           </div>
           <div>
             <label for="popupGuestCount">Number of Guests:</label>
@@ -128,17 +132,21 @@
               <option value="4">4</option>
             </select>
           </div>
-          <!-- Rezerve Et butonu -->
+          <!-- Hesaplanan toplam ücreti otomatik göster -->
+          <div *ngIf="calculatedPrice !== null">
+            <p>Total Price: {{ calculatedPrice | currency }}</p>
+          </div>
+          <!-- Rezervasyonu oluşturma butonu -->
           <button (click)="createReservation()">Reserve this Room</button>
         </div>
       </div>
     </div>
-  
+    
     <!-- Hata mesajı varsa -->
     <div *ngIf="errorMessage">
       <p>{{ errorMessage }}</p>
     </div>
-  
+    
     <!-- Admin Dashboard'a gitme butonu (Sadece adminler için) -->
     <button *ngIf="isAdmin()" class="btn-admin-dashboard" (click)="goToAdminDashboard()">
       Go to Admin Dashboard
