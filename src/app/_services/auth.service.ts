@@ -8,10 +8,13 @@ import { jwtDecode } from 'jwt-decode';
   providedIn: 'root'
 })
 export class AuthService {
+  private currentUser: any;
   
   private apiUrl = 'http://localhost:8080/api';  // Backend API URL'si
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    this.currentUser = { id: 39 };  // Örneğin, kullanıcı ID'sini burada hardcoded aldık
+  }
 
   // Kullanıcı girişi sağlamak için backend API'si ile iletişim kur
  login(email: string, password: string): Observable<{ token: string }> {
@@ -24,6 +27,10 @@ export class AuthService {
   // Token'ı sessionStorage'da sakla
   storeToken(token: string): void {
     sessionStorage.setItem('token', token);  // Token'ı sessionStorage'da sakla
+  }
+
+  getUserId(): number {
+    return this.currentUser ? this.currentUser.id: null;  // Kullanıcının ID'sini döndürüyoruz
   }
 
   // Kullanıcıyı kontrol et
@@ -51,7 +58,6 @@ removeToken(): void {
   sessionStorage.removeItem('token');  // Token'ı sessionStorage'dan sil
   localStorage.removeItem('role');  // Role bilgisini de sil
 }
-
 
 getUserInfo(email: string): Observable<{ user: { id: string, name: string } }> {
   const token = sessionStorage.getItem('token');

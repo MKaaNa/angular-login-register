@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { RoomService } from '../Room/room.service';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../_services/auth.service';  // Import AuthService
-import { Router } from '@angular/router';  // Import Router
+import { AuthService } from '../_services/auth.service';  
+import { Router } from '@angular/router';  
+import { ReservationService } from '../_services/reservation.service';
+import { Reservation } from '../models/reservation.model';
 
 @Component({
   selector: 'app-reservation',
@@ -26,39 +28,35 @@ export class ReservationComponent implements OnInit {
   currentPage: any;
   totalPages: any;
 
+  selectedRoomId: number = 0;  // Seçilen odanın ID'si
 
   constructor(
     private roomService: RoomService, 
     private http: HttpClient,
-    private authService: AuthService,  // Inject AuthService
-    private router: Router  // Inject Router
+    private reservationService: ReservationService,
+    private authService: AuthService,  
+    private router: Router  
   ) { }
 
-  ngOnInit(): void {  }
+  ngOnInit(): void {}
 
+  // Kullanıcının admin olup olmadığını kontrol et
+  isAdmin(): boolean {
+    return this.authService.isAdmin();  
+  }
 
- // Check if the user is an admin
- isAdmin(): boolean {
-  return this.authService.isAdmin();  // Call the isAdmin method from AuthService
-}
+  // Admin dashboard'a yönlendirme
+  goToAdminDashboard(): void {
+    this.router.navigate(['/admin-dashboard']);
+  }
 
-
-// Admin dashboard'a gitme
-goToAdminDashboard(): void {
-  this.router.navigate(['/admin-dashboard']);
-}
-
-  // Oda almak için API'yi çağırma
+  // Oda listesini almak için API çağrısı
   getAvailableRooms(roomType: string, guestCount: number, startDate: string, endDate: string): void {
     this.roomService.getAvailableRooms(roomType, guestCount, startDate, endDate)
       .subscribe(
         (rooms: any[]) => {
           this.rooms = rooms;
-          if (rooms.length === 0) {
-            this.showNoRoomsPopup = true;
-          } else {
-            this.showNoRoomsPopup = false;
-          }
+          this.showNoRoomsPopup = rooms.length === 0;
         },
         (error: any) => {
           console.error('Error fetching available rooms', error);
@@ -67,25 +65,18 @@ goToAdminDashboard(): void {
       );
   }
 
-  // Tarih aralığına göre filtreleme
+  // Tarih aralığına göre oda filtreleme
   getAvailableRoomsWithDateRange(roomType: string, guestCount: number, startDate: string, endDate: string): void {
     this.roomService.getAvailableRooms(roomType, guestCount, startDate, endDate)
       .subscribe(
         (rooms: any[]) => {
           let filteredRooms = rooms.filter((room: any) => {
             let availableDates = room.availableDates;
-            return availableDates.some((date: string) => {
-              return date >= startDate && date <= endDate;
-            });
+            return availableDates.some((date: string) => date >= startDate && date <= endDate);
           });
 
           this.rooms = filteredRooms.map(room => ({ ...room, startDate, endDate }));
-
-          if (filteredRooms.length === 0) {
-            this.showNoRoomsPopup = true;
-          } else {
-            this.showNoRoomsPopup = false;
-          }
+          this.showNoRoomsPopup = filteredRooms.length === 0;
         },
         (error: any) => {
           console.error('Error fetching available rooms with date range', error);
@@ -94,10 +85,12 @@ goToAdminDashboard(): void {
       );
   }
 
-  // Oda detaylarını göster
+  // Oda detaylarını gösterme
   showRoomDetails(room: any): void {
     this.selectedRoomDetails = room;
-
+    this.selectedRoomId = room.id;  // Seçilen odanın ID'si kaydediliyor
+    console.log(this.selectedRoomId);
+    
     if (this.selectedRoomDetails.roomType === 'single') {
       this.selectedRoomDetails.images = ['si1.jpg', 'si2.jpg', 'si3.jpg'];
       this.selectedRoomDetails.description = 'Tek kişilik, misafirlerimiz için kompakt ve sade bir oda.';
@@ -119,28 +112,50 @@ goToAdminDashboard(): void {
     this.showRoomDetailsPopup = true;
   }
 
-  // Sıralama fonksiyonu
+  // Rezervasyon oluşturma
+  createReservation(): void {
+    const reservation: Reservation = {
+        room: { id: this.selectedRoomId },  // Seçilen odanın ID'si "room" nesnesi içinde gönderiliyor
+        startDate: this.startDate,
+        endDate: this.endDate,
+        guestCount: this.selectedGuestCount,
+        user: { id: this.authService.getUserId() }
+    };
+
+    this.reservationService.createReservation(reservation).subscribe(
+        (response: any) => {
+            console.log('Reservation created successfully:', response);
+            // Başarılı rezervasyon sonrası yönlendirme veya mesaj gösterilebilir.
+        },
+        (error) => {
+            console.error('Error creating reservation:', error);
+            // Hata durumunda kullanıcıya mesaj gösterilebilir.
+        }
+    );
+  }
+
+  // Kolonlara göre sıralama fonksiyonu
   sortByColumn(column: string): void {
     this.rooms.sort((a, b) => {
       if (column === 'price') {
-        return b.price - a.price;  // Fiyat olarak büyükten küçüğe sıralama
+        return b.price - a.price;
       } else if (column === 'startDate' || column === 'endDate') {
-        return new Date(b[column]).getTime() - new Date(a[column]).getTime();  // Tarihlere göre sıralama
+        return new Date(b[column]).getTime() - new Date(a[column]).getTime();
       } else if (column === 'guestCount') {
-        return b.guestCount - a.guestCount;  // Misafir sayısına göre sıralama
+        return b.guestCount - a.guestCount;
       }
       return 0;
     });
   }
 
-  // Resim değiştirme işlevi
+  // Resim değiştirme işlemi
   changeImage(direction: number): void {
     if (this.selectedRoomDetails?.images?.length > 0) {
       this.imageIndex = (this.imageIndex + direction + this.selectedRoomDetails.images.length) % this.selectedRoomDetails.images.length;
     }
   }
 
-  // Oda detaylarını popup kapatma
+  // Oda detayları popup'ını kapatma
   closeRoomDetailsPopup(): void {
     this.showRoomDetailsPopup = false;
     this.selectedRoomDetails = null;

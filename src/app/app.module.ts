@@ -16,7 +16,7 @@ import { RoomService } from './Room/room.service';
 import { AdminDashboardComponent } from './admin/admin-dashboard.component';
 import { UserService } from './_services/user.service';
 import { NgxPaginationModule } from 'ngx-pagination'; // Import the module
-
+import { ReservationService } from './_services/reservation.service'; // Servisi import edin
 
 
 // Yönlendirme ayarları
@@ -30,6 +30,7 @@ const routes: Routes = [
   { path: 'admin-dashboard', component: AdminDashboardComponent},
   { path: 'reservation', component: ReservationComponent },
   { path: '', redirectTo: '/reservation', pathMatch: 'full' },  // Yönlendirme
+  
 ];
 
 @NgModule({

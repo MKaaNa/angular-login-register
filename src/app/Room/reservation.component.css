@@ -8,6 +8,7 @@
   background-color: #f4f4f4;
   padding: 20px;
   box-sizing: border-box;
+  margin-top: 20px;
 }
 
 /* Form elemanları arasındaki boşlukları artırmak ve yatayda ortalamak */
@@ -68,7 +69,7 @@ input, select {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* Popup Modal: Odaların detayları */
+/* Popup Modal: Odaların detayları için resim */
 .popup-room-image {
   width: 100%;
   height: auto;
@@ -76,22 +77,21 @@ input, select {
   border-radius: 5px;
 }
 
-/* Popup Modal: Odalar bulunamazsa gösterilecek baloncuk şeklinde popup */
+/* Popup Modal: Odalar bulunamazsa veya detayları gösteren popup */
 .popup {
-  position: fixed;
-  top: 10%;  /* Ekranın üst kısmına biraz uzak */
-  left: 50%;  /* Ekranın tam ortasında olabilmesi için */
-  transform: translateX(-50%);  /* Tam ortalamak için */
-  background-color: rgba(0, 0, 0, 0.8); /* Yarı saydam arka plan */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  width: 300px;  /* Baloncuk şeklinde daha küçük bir popup */
-  padding: 20px;
-  border-radius: 15px;  /* Yuvarlatılmış köşeler */
-  opacity: 0;
-  animation: popupAnim 0.5s forwards; /* Animasyon ekleniyor */
+  position: fixed;              /* Sayfa kaydırmasından bağımsız sabit konum */
+  top: 5%;                     /* Ekranın üstünden %5 boşluk bırak (daha yukarı alındı) */
+  left: 50%;                   /* Yatayda ortalamak için */
+  transform: translateX(-50%); /* Yatay ortalamayı tamamlar */
+  z-index: 1000;               /* Diğer içeriklerin üzerinde görünecek */
+  width: 80%;                  /* İsteğe bağlı genişlik ayarı */
+  max-width: 500px;            /* Maksimum genişlik sınırı */
+  background-color: white;     /* Arka plan rengi */
+  padding: 20px;               /* İç boşluk */
+  border-radius: 5px;          /* Köşe yuvarlama */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Gölge efekti */
+  max-height: 90vh;            /* Maksimum yükseklik, viewport yüksekliğinin %90'ı */
+  overflow-y: auto;            /* İçerik taşarsa kaydırma ekle */
 }
 
 /* Animasyon */
@@ -268,109 +268,90 @@ label {
   background-color: #2980b9;
 }
 
-
-/* No rooms available mesajı */
-div p {
-  font-size: 1.5em;
-  color: red;
-  font-weight: bold;
-  text-align: center;
-}
-
-
-
 /* Tabloyu ortalamak için genel container */
-.reservation-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-}
 .table-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 
 /* Modern Tablo Stil */
 .room-table {
-    width: 100%;
-    max-width: 1200px; /* Tabloyu ekran boyutlarına göre sınırla */
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Hafif gölge */
-    border-radius: 10px;
-    overflow: hidden; /* Kenarları yuvarlatılmış yaparak taşma engellenir */
+  width: 100%;
+  max-width: 1200px; /* Tabloyu ekran boyutlarına göre sınırla */
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+  border-radius: 10px;
+  overflow: hidden; /* Kenarları yuvarlatılmış yaparak taşma engellenir */
 }
 
 .room-table th, .room-table td {
-    padding: 12px 30px;
-    text-align: left;
-    border-bottom: 1px solid #ddd; /* İnce kenarlık */
+  padding: 12px 30px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
-/* Hover efekti */
 .room-table tr:hover {
-    background-color: #f1f1f1;
-    cursor: pointer;
+  background-color: #f1f1f1;
+  cursor: pointer;
 }
 
 .room-table th {
-    background-color: #3498db;
-    color: white;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 16px;
+  background-color: #3498db;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 16px;
 }
 
 .room-table td {
-    font-size: 14px;
-    color: #555;
+  font-size: 14px;
+  color: #555;
 }
 
 .room-table button {
-    background-color: #3498db;
-    padding: 10px 20px;
-    border-radius: 5px;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-    width: 100%;
-    max-width: 180px;
-    margin: 0 auto;
-    display: block;
+  background-color: #3498db;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 180px;
+  margin: 0 auto;
+  display: block;
 }
 
 .room-table button:hover {
-    background-color: #2980b9;
+  background-color: #2980b9;
 }
 
 .pagination {
-    margin-top: 20px;
-    text-align: center;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .pagination button {
-    padding: 10px 20px;
-    border-radius: 5px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    font-size: 16px;
-    margin: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  font-size: 16px;
+  margin: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .pagination button:hover {
-    background-color: #45a049;
+  background-color: #45a049;
 }
 
 /* Hata mesajı */
