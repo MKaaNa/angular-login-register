@@ -1,0 +1,52 @@
+<div class="admin-reservations">
+  <h2>Reservation Management</h2>
+  <table class="reservation-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Room Type</th>
+        <th>Dates</th>
+        <th>Guests</th>
+        <th>Total Price</th>
+        <th>Status</th>
+        <th>User Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let res of reservations">
+        <td>{{ res.id }}</td>
+        <td>{{ res.room?.roomType | titlecase }}</td>
+        <td>{{ res.startDate | date:'shortDate' }} - {{ res.endDate | date:'shortDate' }}</td>
+        <td>{{ res.guestCount }}</td>
+        <td>{{ res.totalPrice | currency }}</td>
+        <td>{{ res.status }}</td>
+        <td>{{ res.user?.email }}</td>
+        <td>
+          <button (click)="approveReservation(res)">Approve</button>
+          <button (click)="rejectReservation(res)">Reject</button>
+          <button (click)="openEditModal(res)">Edit</button>
+          <!-- res.id'in kesinlikle var olduğundan emin olmak için "!" operatörü kullanıldı -->
+          <button (click)="deleteReservation(res.id!)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Edit Modal -->
+  <div class="modal" *ngIf="selectedReservation">
+    <div class="modal-content">
+      <span class="close" (click)="selectedReservation = null">&times;</span>
+      <h3>Edit Reservation</h3>
+      <form (ngSubmit)="updateReservation()">
+        <label for="editStartDate">Start Date:</label>
+        <input type="date" id="editStartDate" [(ngModel)]="selectedReservation.startDate" name="editStartDate">
+        <label for="editEndDate">End Date:</label>
+        <input type="date" id="editEndDate" [(ngModel)]="selectedReservation.endDate" name="editEndDate">
+        <label for="adminNote">Admin Note:</label>
+        <textarea id="adminNote" [(ngModel)]="selectedReservation.adminNote" name="adminNote"></textarea>
+        <button type="submit">Update</button>
+      </form>
+    </div>
+  </div>
+</div>

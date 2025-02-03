@@ -1,11 +1,13 @@
 <div class="dashboard-container">
   <div class="welcome-container">
-    <h2>Welcome {{ user?.name || 'User' }}</h2>
-
-    <!-- Make Reservation Butonu -->
-    <button class="btn-reservation" (click)="makeReservation()">Make Reservation</button>
-
-    <!-- Logout Butonu -->
-    <button class="btn-logout" (click)="logout()">Logout</button>
+    <h2>Welcome, {{ user.name }}</h2>
+    <!-- Bildirim Alanı -->
+    <div class="notification" *ngIf="reservationUpdates.length > 0">
+      <ul>
+        <li *ngFor="let update of reservationUpdates">{{ update }}</li>
+      </ul>
+    </div>
+    <button (click)="makeReservation()">Make Reservation</button>
+    <button (click)="logout()">Logout</button>
   </div>
 </div>

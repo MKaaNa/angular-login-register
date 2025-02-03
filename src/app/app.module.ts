@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { AdminReservationsComponent } from './admin/admin-reservations.component';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HomeComponent } from './home/home.component';
@@ -17,6 +17,7 @@ import { AdminDashboardComponent } from './admin/admin-dashboard.component';
 import { UserService } from './_services/user.service';
 import { NgxPaginationModule } from 'ngx-pagination'; // Import the module
 import { ReservationService } from './_services/reservation.service'; // Servisi import edin
+import { CommonModule } from '@angular/common'; // CommonModule'ı import edin
 
 
 // Yönlendirme ayarları
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent},
   { path: 'reservation', component: ReservationComponent },
+  { path: 'admin-reservations', component: AdminReservationsComponent },
   { path: '', redirectTo: '/reservation', pathMatch: 'full' },  // Yönlendirme
   
 ];
@@ -36,6 +38,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
+    AdminReservationsComponent,
     NavbarComponent,
     HomeComponent,
     RegisterComponent,
@@ -47,6 +50,7 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     RouterModule.forRoot(routes),  
     FormsModule,
     NgxPaginationModule,

@@ -1,227 +1,198 @@
 <div class="admin-dashboard">
-    <h2>Admin Dashboard</h2>
-  
-      <!-- Hoşgeldin mesajı -->
+  <h2>Admin Dashboard</h2>
+
+  <!-- Hoşgeldin mesajı -->
   <div class="welcome-message">
     Welcome, {{ 'Admin' }}!
   </div>
 
   <!-- Kullanıcılar Tablosu -->
-<div class="tab-content" [ngClass]="{active: currentTab === 'userManagement'}">
-  <h3>User Management</h3>
+  <div class="tab-content" [ngClass]="{ active: currentTab === 'userManagement' }">
+    <h3>User Management</h3>
 
-<!-- Sekme Başlıkları (Butonlar) -->
-<div class="tabs">
-  <button (click)="changeTab('roomManagement')">Room Management</button>
-</div>
-
-
-<button (click)="openAddUserModal()" class="add-user-btn">Add New User</button>
-<table class="table">
-  <thead>
-    <tr>
-      <th>Email</th>
-      <th>Role</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users | paginate: { itemsPerPage: 5, currentPage: p }">
-      <td>{{ user.email }}</td>
-      <td>{{ user.userRole }}</td>
-      <td>
-        <button (click)="editUser(user)">Edit</button>
-        <button (click)="deleteUser(user.id)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!-- Sayfalama -->
-  <pagination-controls (pageChange)="p = $event"></pagination-controls>
-</div>
-
-     <!-- Kullanıcı Ekleme ve Düzenleme Modalı -->
-     <div class="modal" *ngIf="showEditUserModal">
-        <div class="modal-content">
-            <span class="close" (click)="closeModal()">&times;</span>
-            <h2>Edit User</h2>
-            <form (ngSubmit)="saveUser()">
-                <label for="email">Email</label>
-                <input type="email" id="email" [(ngModel)]="newUser.email" name="email" required />
-
-                <label for="username">Name</label>
-                <input type="text" id="username" [(ngModel)]="newUser.name" name="name" required />
-
-                <label for="role">Role</label>
-                <select id="role" [(ngModel)]="newUser.userRole" name="role" required>
-                    <option value="ADMIN">Admin</option>
-                    <option value="CUSTOMER">Customer</option>
-                </select>
-
-                <button type="submit">Save Changes</button>
-                <button type="button" (click)="closeModal()">Cancel</button>
-            </form>
-        </div>
+    <!-- Sekme Başlıkları (Butonlar) -->
+    <div class="tabs">
+      <button (click)="changeTab('roomManagement')">Room Management</button>
     </div>
 
- <!-- Yeni Kullanıcı Ekleme Modalı -->
- <div class="modal" *ngIf="showAddUserModal">
-  <div class="modal-content">
-    <span class="close" (click)="closeModal()">&times;</span>
-    <h2>Add New User</h2>
-    <form (ngSubmit)="addUser()">
-      <label for="email">Email:</label>
-      <input type="email" [(ngModel)]="newUser.email" name="email" required />
+    <button (click)="openAddUserModal()" class="add-user-btn">Add New User</button>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users | paginate: { itemsPerPage: 5, currentPage: p }">
+          <td>{{ user.email }}</td>
+          <td>{{ user.userRole }}</td>
+          <td>
+            <button (click)="editUser(user)">Edit</button>
+            <!-- Burada delete işleminden sonra loadUsers() çağırıyoruz -->
+            <button (click)="deleteUser(user.id); loadUsers()">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-      <label for="name">Name:</label>
-      <input type="text" [(ngModel)]="newUser.name" name="name" required />
+    <!-- Bildirim Alanı (örneğin, sağ üst köşede) -->
+    <div class="notification" *ngIf="pendingReservationsCount > 0" 
+         style="position: absolute; top: 10px; right: 10px; background-color: #ffc107; padding: 8px; border-radius: 4px;">
+      You have {{ pendingReservationsCount }} new reservation request(s)!
+    </div>
 
-      <label for="role">Role:</label>
-      <select [(ngModel)]="newUser.userRole" name="role" required>
-        <option value="ADMIN">Admin</option>
-        <option value="CUSTOMER">Customer</option>
-      </select>
-
-      <button type="submit">Add User</button>
-      <button type="button" (click)="closeModal()">Cancel</button>
-    </form>
+    <!-- Sayfalama -->
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
   </div>
-</div>
 
+  <!-- Kullanıcı Ekleme Modalı -->
+  <div class="modal" *ngIf="showAddUserModal">
+    <div class="modal-content">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <h2>Add New User</h2>
+      <form (ngSubmit)="addUser()">
+        <label for="email">Email:</label>
+        <input type="email" [(ngModel)]="newUser.email" name="email" required />
 
-  <!-- Kullanıcı düzenleme modalı -->
-<div *ngIf="showEditUserModal" class="modal">
+        <label for="name">Name:</label>
+        <input type="text" [(ngModel)]="newUser.name" name="name" required />
+
+        <label for="role">Role:</label>
+        <select [(ngModel)]="newUser.userRole" name="role" required>
+          <option value="ADMIN">Admin</option>
+          <option value="CUSTOMER">Customer</option>
+        </select>
+
+        <button type="submit">Add User</button>
+        <button type="button" (click)="closeModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Kullanıcı Düzenleme Modalı -->
+  <div class="modal" *ngIf="showEditUserModal">
     <div class="modal-content">
       <span class="close" (click)="closeModal()">&times;</span>
       <h2>Edit User</h2>
       <form (ngSubmit)="saveUser()">
         <label for="email">Email</label>
         <input type="email" id="email" [(ngModel)]="newUser.email" name="email" required />
-  
+
         <label for="username">Name</label>
         <input type="text" id="username" [(ngModel)]="newUser.name" name="name" required />
-  
+
         <label for="role">Role</label>
         <select id="role" [(ngModel)]="newUser.userRole" name="role" required>
           <option value="ADMIN">Admin</option>
           <option value="CUSTOMER">Customer</option>
         </select>
-  
+
         <button type="submit">Save Changes</button>
         <button type="button" (click)="closeModal()">Cancel</button>
       </form>
     </div>
   </div>
-    <button class="btn-logout" (click)="logout()">Logout</button>
-    
-    
 
-    
+  <!-- Rezervasyon Yönetimi Paneline Geçiş Butonu -->
+  <button class="btn-reservation" (click)="goToAdminReservations()">Reservation Management</button>
+
+  <!-- Logout Butonu -->
+  <button class="btn-logout" (click)="logout()">Logout</button>
+
   <!-- Room Management Sekmesi -->
   <div class="tab-content" [ngClass]="{ active: currentTab === 'roomManagement' }">
     <h3>Room Management</h3>
 
     <div class="room-management-actions">
-        <button (click)="openAddRoomModal()" class="add-room-btn">Add New Room</button>
-        <button (click)="changeTab('userManagement')" class="back-btn">← Back to User Management</button>
+      <button (click)="openAddRoomModal()" class="add-room-btn">Add New Room</button>
+      <button (click)="changeTab('userManagement')" class="back-btn">← Back to User Management</button>
     </div>
 
-<!-- Oda Listesi -->
-<table class="room-table">
-  <thead>
-    <tr>
-      <th>Room Type</th>
-      <th>Price</th>
-      <th>Start Date</th>
-      <th>End Date</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let room of rooms | paginate: { itemsPerPage: 5, currentPage: p }">
-      <td>{{ room.roomType }}</td>
-      <td>{{ room.price }}</td>
-      <td>{{ room.startDate | date:'shortDate' }}</td>
-      <td>{{ room.endDate | date:'shortDate' }}</td>
-      <td>
-        <button (click)="openEditRoomModal(room)">Edit</button>
-        <button (click)="deleteRoom(room.id)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+    <!-- Oda Listesi -->
+    <table class="room-table">
+      <thead>
+        <tr>
+          <th>Room Type</th>
+          <th>Price</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let room of rooms | paginate: { itemsPerPage: 5, currentPage: p }">
+          <td>{{ room.roomType }}</td>
+          <td>{{ room.price }}</td>
+          <td>{{ room.startDate | date:'shortDate' }}</td>
+          <td>{{ room.endDate | date:'shortDate' }}</td>
+          <td>
+            <button (click)="openEditRoomModal(room)">Edit</button>
+            <button (click)="deleteRoom(room.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
+    <!-- Oda Düzenleme Modalı -->
+    <div class="modal" *ngIf="showEditRoomModal">
+      <div class="modal-content">
+        <span class="close" (click)="closeModal()">x</span>
+        <h2>Edit Room</h2>
+        <form (ngSubmit)="editRoom()">
+          <label for="roomType">Room Type</label>
+          <input type="text" id="roomType" [(ngModel)]="newRoom.roomType" name="roomType" required />
 
-<!-- Oda düzenleme modalı -->
-<div *ngIf="showEditRoomModal" class="modal">
-  <div class="modal-content">
-    <span class="close" (click)="closeModal()">x</span>
-    <h2>Edit Room</h2>
-    <form (ngSubmit)="editRoom()">
-      <label for="roomType">Room Type</label>
-      <input type="text" id="roomType" [(ngModel)]="newRoom.roomType" name="roomType" required />
+          <label for="guestCount">Guest Count</label>
+          <input type="number" id="guestCount" [(ngModel)]="newRoom.guestCount" name="guestCount" required />
 
-      <label for="guestCount">Guest Count</label>
-      <input type="number" id="guestCount" [(ngModel)]="newRoom.guestCount" name="guestCount" required />
+          <label for="price">Price</label>
+          <input type="number" id="price" [(ngModel)]="newRoom.price" name="price" required />
 
-      <label for="price">Price</label>
-      <input type="number" id="price" [(ngModel)]="newRoom.price" name="price" required />
+          <label for="startDate">Start Date</label>
+          <input type="date" id="startDate" [(ngModel)]="newRoom.startDate" name="startDate" required />
 
-      <label for="startDate">Start Date</label>
-      <input type="date" id="startDate" [(ngModel)]="newRoom.startDate" name="startDate" required />
+          <label for="endDate">End Date</label>
+          <input type="date" id="endDate" [(ngModel)]="newRoom.endDate" name="endDate" required />
 
-      <label for="endDate">End Date</label>
-      <input type="date" id="endDate" [(ngModel)]="newRoom.endDate" name="endDate" required />
+          <button type="submit">Save Changes</button>
+          <button type="button" (click)="closeModal()">Cancel</button>
+        </form>
+      </div>
+    </div>
 
-      <button type="submit">Save Changes</button>
-      <button type="button" (click)="closeModal()">Cancel</button>
-    </form>
+    <!-- Sayfalama -->
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
   </div>
-</div>
 
-
-  <!-- Sayfalama -->
-  <pagination-controls (pageChange)="p = $event"></pagination-controls>
-</div>
-
-<!-- Oda ekleme modalı -->
-<div *ngIf="showAddRoomModal" class="modal">
-  <div class="modal-content">
-    <span class="close" (click)="closeModal()">&times;</span>
-    <h2>Add New Room</h2>
-    <form (ngSubmit)="addRoom()">
-      <!-- Oda Tipi -->
-      <label for="roomType">Room Type:</label>
-      <select id="roomType" [(ngModel)]="newRoom.roomType" name="roomType" required (ngModelChange)="updateTotalPrice()">
-        <option value="">-- Select Room Type --</option>
-        <option value="single">Single</option>
-        <option value="double">Double</option>
-        <option value="suite">Suite</option>
-      </select>
-      
-      <!-- Misafir Sayısı -->
-      <label for="guestCount">Guest Count:</label>
-      <input type="number" id="guestCount" [(ngModel)]="newRoom.guestCount" name="guestCount" required />
-
-      <!-- Başlangıç Tarihi -->
-      <label for="startDate">Start Date:</label>
-      <input type="date" id="startDate" [(ngModel)]="newRoom.startDate" name="startDate" required (ngModelChange)="updateTotalPrice()">
-
-      <!-- Bitiş Tarihi -->
-      <label for="endDate">End Date:</label>
-      <input type="date" id="endDate" [(ngModel)]="newRoom.endDate" name="endDate" required (ngModelChange)="updateTotalPrice()">
-
-      <!-- Fiyat (Toplam Ücret) -->
-      <label for="price">Total Price:</label>
-      <!-- Bu alan otomatik doldurulacak; admin isterse düzenleyebilir -->
-      <input type="number" id="price" [(ngModel)]="newRoom.price" name="price" required />
-
-      <button type="submit">Add Room</button>
-      <button type="button" (click)="closeModal()">Cancel</button>
-    </form>
+  <!-- Oda Ekleme Modalı -->
+  <div class="modal" *ngIf="showAddRoomModal">
+    <div class="modal-content">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <h2>Add New Room</h2>
+      <form (ngSubmit)="addRoom()">
+        <label for="roomType">Room Type:</label>
+        <select id="roomType" [(ngModel)]="newRoom.roomType" name="roomType" required (ngModelChange)="updateDefaultPrice()">
+          <option value="">-- Select Room Type --</option>
+          <option value="single">Single</option>
+          <option value="double">Double</option>
+          <option value="suite">Suite</option>
+        </select>
+        <label for="guestCount">Guest Count:</label>
+        <input type="number" id="guestCount" [(ngModel)]="newRoom.guestCount" name="guestCount" required />
+        <label for="price">Price (Daily):</label>
+        <input type="number" id="price" [(ngModel)]="newRoom.price" name="price" required />
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" [(ngModel)]="newRoom.startDate" name="startDate" required />
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" [(ngModel)]="newRoom.endDate" name="endDate" required />
+        <button type="submit">Add Room</button>
+        <button type="button" (click)="closeModal()">Cancel</button>
+      </form>
+    </div>
   </div>
-</div>
 
-<!-- Reservation Button for Admins -->
-<button class="btn-reservation" (click)="goToReservation()">Go to Reservation</button>
+  <!-- Reservation Button for Admins -->
+  <button class="btn-reservation" (click)="goToReservation()">Go to Reservation</button>
+</div>

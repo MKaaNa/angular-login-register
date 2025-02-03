@@ -154,22 +154,22 @@ calculatePrice(): void {
   // Rezervasyon oluşturma
   createReservation(): void {
     const reservation: Reservation = {
-        room: { id: this.selectedRoomId },  // Seçilen odanın ID'si "room" nesnesi içinde gönderiliyor
-        startDate: this.startDate,
-        endDate: this.endDate,
-        guestCount: this.selectedGuestCount,
-        user: { id: this.authService.getUserId() }
+      room: { id: this.selectedRoomId },  // Sadece id gönderiliyor
+      startDate: this.startDate,
+      endDate: this.endDate,
+      guestCount: this.selectedGuestCount,
+      user: { id: this.authService.getUserId() }, // Sadece id gönderiliyor
+      totalPrice: this.calculatedPrice || 0,  // Hesaplanan fiyat veya 0
+      status: 'PENDING'  // Varsayılan durum
     };
-
+  
     this.reservationService.createReservation(reservation).subscribe(
-        (response: any) => {
-            console.log('Reservation created successfully:', response);
-            // Başarılı rezervasyon sonrası yönlendirme veya mesaj gösterilebilir.
-        },
-        (error) => {
-            console.error('Error creating reservation:', error);
-            // Hata durumunda kullanıcıya mesaj gösterilebilir.
-        }
+      (response: any) => {
+        console.log('Reservation created successfully:', response);
+      },
+      (error) => {
+        console.error('Error creating reservation:', error);
+      }
     );
   }
 

@@ -1,15 +1,18 @@
-export class Reservation {
-    room: { id: number };
-    startDate: string;
-    endDate: string;
+export interface Reservation {
+    id?: number;  // Yeni rezervasyon oluştururken id olmayabilir
+    user: {
+      id: number;
+      email?: string;  // Rezervasyon oluşturma sırasında email gönderilmez, backend doldurur
+    };
+    room: {
+      id: number;
+      roomType?: string; // Backend tarafından doldurulacak
+      price?: number;    // Backend tarafından doldurulacak
+    };
+    startDate: string;   // ISO formatında (örn: "2025-02-03")
+    endDate: string;     // ISO formatında
     guestCount: number;
-    user: { id: number };
-  
-    constructor(roomId: number, startDate: string, endDate: string, guestCount: number, userId: number) {
-      this.room = { id: roomId };  // room property'yi atıyoruz
-      this.startDate = startDate;
-      this.endDate = endDate;
-      this.guestCount = guestCount;
-      this.user = { id: userId };
-    }
+    totalPrice: number;
+    status: string;      // "PENDING", "APPROVED", "REJECTED", "PAID" vb.
+    adminNote?: string;
   }

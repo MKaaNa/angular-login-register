@@ -1,25 +1,37 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { Reservation } from '../models/reservation.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservationService {
-
-  private apiUrl = `http://localhost:8080/api/reservations`;
+  // Base URL'yi backend API'nize göre ayarlayın
+  private baseUrl = 'http://localhost:8080/api/reservations';
 
   constructor(private http: HttpClient) { }
 
-  // Create a reservation
   createReservation(reservation: Reservation): Observable<Reservation> {
-    return this.http.post<Reservation>(`${this.apiUrl}/create`, reservation);
+    return this.http.post<Reservation>(`${this.baseUrl}/create`, reservation);
+  }
+  
+  getReservations(): Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(`${this.baseUrl}`);  
   }
 
-  // Get all reservations
+  markReservationAsPaid(id: number): Observable<Reservation> {
+    return this.http.put<Reservation>(`${this.baseUrl}/${id}/pay`, {}); 
+  }
   getAllReservations(): Observable<Reservation[]> {
-    return this.http.get<Reservation[]>(`${this.apiUrl}/all`);
+    return this.http.get<Reservation[]>(this.baseUrl);
+  }
+
+  updateReservation(reservation: Reservation): Observable<Reservation> {
+    return this.http.put<Reservation>(`${this.baseUrl}/${reservation.id}`, reservation);
+  }
+
+  deleteReservation(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }

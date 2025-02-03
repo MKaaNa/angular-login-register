@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../_services/auth.service';  // AuthService import et
-import { Router } from '@angular/router';  // Router import et
+import { AuthService } from '../_services/auth.service';
+import { Router } from '@angular/router';
+import { ReservationService } from '../_services/reservation.service';
+import { Reservation } from '../models/reservation.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,45 +10,43 @@ import { Router } from '@angular/router';  // Router import et
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  user: any = {};
+  reservationUpdates: string[] = [];
 
-  user: any = {};  // Kullanıcı bilgilerini burada saklayacağız
-  email: string = ''; // Email özelliğini burada tanımlıyoruz
-
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private reservationService: ReservationService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    if (!this.authService.isAuthenticated()) {
-      this.router.navigate(['/home']);
-    }
-  
-    // Admin ise admin paneline yönlendir
-    if (this.authService.isAdmin()) {
-      this.router.navigate(['/admin-dashboard']);
-    }
-  
-    const email = sessionStorage.getItem('email');
-    if (email) {
-      this.authService.getUserInfo(email).subscribe(
-        (userData) => {
-          this.user = userData;
-        },
-        (error) => {
-          console.error('Error fetching user info:', error);
-        }
-      );
-    } else {
-      console.warn('No email found in sessionStorage');
+    const userId = this.authService.getUserId(); // Kullanıcı ID'sini al
+    if (userId) {
+      this.checkUserReservations(userId);
     }
   }
 
-  // Kullanıcı çıkışı
+  checkUserReservations(userId: number): void {
+    this.reservationService.getAllReservations().subscribe(
+      (reservations: Reservation[]) => {
+        reservations.forEach((res: Reservation) => {
+          if (res.user && res.user.id === userId && res.status !== 'PENDING') {
+            this.reservationUpdates.push(`Reservation ${res.id} is now ${res.status}`);
+          }
+        });
+      },
+      (error: any) => {
+        console.error('Error fetching user reservations:', error);
+      }
+    );
+  }
+
   logout(): void {
-    this.authService.logout();  // Token'ı sil
-    this.router.navigate(['/home']);  // Home sayfasına yönlendir
+    this.authService.logout();
+    this.router.navigate(['/home']);
   }
 
-  // Rezervasyon yapma işlevi
   makeReservation(): void {
-    this.router.navigate(['/reservation']);  // Rezervasyon sayfasına yönlendir
+    this.router.navigate(['/reservation']);
   }
 }
