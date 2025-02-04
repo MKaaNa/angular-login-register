@@ -1,18 +1,25 @@
+export interface ReservationHistory {
+  action: string;     // Örneğin, "Created", "Approved", "Cancelled", vb.
+  date: string;       // ISO formatında tarih
+  note?: string;      // Opsiyonel açıklama
+}
+
 export interface Reservation {
-    id?: number;  // Yeni rezervasyon oluştururken id olmayabilir
-    user: {
-      id: number;
-      email?: string;  // Rezervasyon oluşturma sırasında email gönderilmez, backend doldurur
-    };
-    room: {
-      id: number;
-      roomType?: string; // Backend tarafından doldurulacak
-      price?: number;    // Backend tarafından doldurulacak
-    };
-    startDate: string;   // ISO formatında (örn: "2025-02-03")
-    endDate: string;     // ISO formatında
-    guestCount: number;
-    totalPrice: number;
-    status: string;      // "PENDING", "APPROVED", "REJECTED", "PAID" vb.
-    adminNote?: string;
-  }
+  id?: number;
+  user: {
+    id: number;
+    email?: string;
+  };
+  room: {
+    id: number;
+    roomType?: string;
+    price?: number;
+  };
+  startDate: string;
+  endDate: string;
+  guestCount: number;
+  totalPrice: number;
+  status: string;
+  adminNote?: string;
+  history?: ReservationHistory[];  // Rezervasyon işlemleri geçmişi
+}

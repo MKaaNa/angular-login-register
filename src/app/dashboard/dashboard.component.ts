@@ -26,6 +26,10 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  goToUserReservations(): void {
+    this.router.navigate(['/user-reservations']);
+  }
+
   checkUserReservations(userId: number): void {
     this.reservationService.getAllReservations().subscribe(
       (reservations: Reservation[]) => {

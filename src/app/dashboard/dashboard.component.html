@@ -7,6 +7,9 @@
         <li *ngFor="let update of reservationUpdates">{{ update }}</li>
       </ul>
     </div>
+    <button routerLink="/user-reservations" class="btn-reservations">
+      My Reservations
+    </button>
     <button (click)="makeReservation()">Make Reservation</button>
     <button (click)="logout()">Logout</button>
   </div>

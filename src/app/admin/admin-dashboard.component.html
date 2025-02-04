@@ -167,31 +167,40 @@
   </div>
 
   <!-- Oda Ekleme Modalı -->
-  <div class="modal" *ngIf="showAddRoomModal">
-    <div class="modal-content">
-      <span class="close" (click)="closeModal()">&times;</span>
-      <h2>Add New Room</h2>
-      <form (ngSubmit)="addRoom()">
-        <label for="roomType">Room Type:</label>
-        <select id="roomType" [(ngModel)]="newRoom.roomType" name="roomType" required (ngModelChange)="updateDefaultPrice()">
-          <option value="">-- Select Room Type --</option>
-          <option value="single">Single</option>
-          <option value="double">Double</option>
-          <option value="suite">Suite</option>
-        </select>
-        <label for="guestCount">Guest Count:</label>
-        <input type="number" id="guestCount" [(ngModel)]="newRoom.guestCount" name="guestCount" required />
-        <label for="price">Price (Daily):</label>
-        <input type="number" id="price" [(ngModel)]="newRoom.price" name="price" required />
-        <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" [(ngModel)]="newRoom.startDate" name="startDate" required />
-        <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" [(ngModel)]="newRoom.endDate" name="endDate" required />
-        <button type="submit">Add Room</button>
-        <button type="button" (click)="closeModal()">Cancel</button>
-      </form>
-    </div>
+<div class="modal" *ngIf="showAddRoomModal">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <h2>Add New Room</h2>
+    <form (ngSubmit)="addRoom()">
+      <label for="roomType">Room Type:</label>
+      <select id="roomType" [(ngModel)]="newRoom.roomType" name="roomType" required 
+              (ngModelChange)="updateDefaultPrice(); updateTotalPrice()">
+        <option value="">-- Select Room Type --</option>
+        <option value="single">Single</option>
+        <option value="double">Double</option>
+        <option value="suite">Suite</option>
+      </select>
+      
+      <label for="guestCount">Guest Count:</label>
+      <input type="number" id="guestCount" [(ngModel)]="newRoom.guestCount" name="guestCount" required />
+
+      <!-- Fiyat alanı admin tarafından düzenlenebilir fakat updateTotalPrice() bu alanı güncelleyecek -->
+      <label for="price">Price (Daily/Total):</label>
+      <input type="number" id="price" [(ngModel)]="newRoom.price" name="price" required />
+
+      <label for="startDate">Start Date:</label>
+      <input type="date" id="startDate" [(ngModel)]="newRoom.startDate" name="startDate" required 
+             (ngModelChange)="updateTotalPrice()" />
+
+      <label for="endDate">End Date:</label>
+      <input type="date" id="endDate" [(ngModel)]="newRoom.endDate" name="endDate" required 
+             (ngModelChange)="updateTotalPrice()" />
+
+      <button type="submit">Add Room</button>
+      <button type="button" (click)="closeModal()">Cancel</button>
+    </form>
   </div>
+</div>
 
   <!-- Reservation Button for Admins -->
   <button class="btn-reservation" (click)="goToReservation()">Go to Reservation</button>

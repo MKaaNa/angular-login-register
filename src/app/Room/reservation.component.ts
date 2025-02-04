@@ -158,7 +158,7 @@ calculatePrice(): void {
       startDate: this.startDate,
       endDate: this.endDate,
       guestCount: this.selectedGuestCount,
-      user: { id: this.authService.getUserId() }, // Sadece id gönderiliyor
+      user: { id: this.authService.getUserId()! }, // Sadece id gönderiliyor
       totalPrice: this.calculatedPrice || 0,  // Hesaplanan fiyat veya 0
       status: 'PENDING'  // Varsayılan durum
     };

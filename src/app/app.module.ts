@@ -18,6 +18,7 @@ import { UserService } from './_services/user.service';
 import { NgxPaginationModule } from 'ngx-pagination'; // Import the module
 import { ReservationService } from './_services/reservation.service'; // Servisi import edin
 import { CommonModule } from '@angular/common'; // CommonModule'ı import edin
+import { UserReservationsComponent } from './_services/user-reservations.component';  // Yeni bileşen
 
 
 // Yönlendirme ayarları
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: 'admin-dashboard', component: AdminDashboardComponent},
   { path: 'reservation', component: ReservationComponent },
   { path: 'admin-reservations', component: AdminReservationsComponent },
+  { path: 'user-reservations', component: UserReservationsComponent }, // Yeni rota
   { path: '', redirectTo: '/reservation', pathMatch: 'full' },  // Yönlendirme
   
 ];
@@ -47,6 +49,7 @@ const routes: Routes = [
     AdminDashboardComponent,
     RoomListComponent,
     ReservationComponent,
+    UserReservationsComponent
   ],
   imports: [
     BrowserModule,

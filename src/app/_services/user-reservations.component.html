@@ -1,0 +1,33 @@
+<div class="user-reservations">
+    <h2>Your Reservations</h2>
+    <table class="reservation-table" *ngIf="reservations.length > 0; else noReservations">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Room Type</th>
+          <th>Dates</th>
+          <th>Guest Count</th>
+          <th>Total Price</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reservation of reservations">
+          <td>{{ reservation.id }}</td>
+          <td>{{ reservation.room?.roomType }}</td>
+          <td>
+            {{ reservation.startDate | date:'shortDate' }} - {{ reservation.endDate | date:'shortDate' }}
+          </td>
+          <td>{{ reservation.guestCount }}</td>
+          <td>{{ reservation.totalPrice | currency }}</td>
+          <td>{{ reservation.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noReservations>
+      <p>No reservations found.</p>
+    </ng-template>
+    <div *ngIf="errorMessage" class="error">
+      <p>{{ errorMessage }}</p>
+    </div>
+  </div>

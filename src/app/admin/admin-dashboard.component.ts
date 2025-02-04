@@ -73,7 +73,7 @@ export class AdminDashboardComponent implements OnInit {
     this.router.navigate(['/admin-reservations']);
   }
 
-  // loadUsers metodunu tanımlıyoruz
+  // Kullanıcıları yükleme
   loadUsers(): void {
     this.userService.getUsers().subscribe(
       (users: any[]) => {
@@ -348,7 +348,7 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  // Eksi metod: closeModal() ve logout() eklenmiştir.
+  // closeModal metodunu ekliyoruz
   closeModal(): void {
     this.showAddUserModal = false;
     this.showEditUserModal = false;
@@ -356,8 +356,8 @@ export class AdminDashboardComponent implements OnInit {
     this.showEditRoomModal = false;
   }
 
+  // logout metodunu ekliyoruz
   logout(): void {
-    // Eğer authService.logout() tanımlı ise çağırın
     this.authService.logout();
     this.router.navigate(['/login']);
   }
