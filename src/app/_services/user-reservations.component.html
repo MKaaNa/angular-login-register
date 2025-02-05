@@ -1,33 +1,72 @@
-<div class="user-reservations">
-    <h2>Your Reservations</h2>
-    <table class="reservation-table" *ngIf="reservations.length > 0; else noReservations">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Room Type</th>
-          <th>Dates</th>
-          <th>Guest Count</th>
-          <th>Total Price</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let reservation of reservations">
-          <td>{{ reservation.id }}</td>
-          <td>{{ reservation.room?.roomType }}</td>
-          <td>
-            {{ reservation.startDate | date:'shortDate' }} - {{ reservation.endDate | date:'shortDate' }}
-          </td>
-          <td>{{ reservation.guestCount }}</td>
-          <td>{{ reservation.totalPrice | currency }}</td>
-          <td>{{ reservation.status }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <ng-template #noReservations>
-      <p>No reservations found.</p>
-    </ng-template>
-    <div *ngIf="errorMessage" class="error">
-      <p>{{ errorMessage }}</p>
-    </div>
+<table class="reservation-table" *ngIf="reservations.length > 0; else noReservations">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Room Type</th>
+      <th>Dates</th>
+      <th>Guest Count</th>
+      <th>Total Price</th>
+      <th>Status</th>
+      <th>Payments</th>
+      <th>Invoice</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let reservation of reservations">
+      <td>{{ reservation.id }}</td>
+      <td>{{ reservation.room?.roomType }}</td>
+      <td>
+        {{ reservation.startDate | date:'shortDate' }} - {{ reservation.endDate | date:'shortDate' }}
+      </td>
+      <td>{{ reservation.guestCount }}</td>
+      <td>{{ reservation.totalPrice | currency }}</td>
+      <td>{{ reservation.status }}</td>
+      <td>
+        <ng-container *ngIf="reservation.status === 'APPROVED'; else paidOrNotApplicable">
+          <button (click)="payReservation(reservation.id!)">Pay</button>
+        </ng-container>
+        <ng-template #paidOrNotApplicable>
+          {{ reservation.status === 'PAID' ? 'Paid' : 'N/A' }}
+        </ng-template>
+      </td>
+      <td>
+        <ng-container *ngIf="reservation.status === 'PAID'">
+          <button (click)="viewInvoice(reservation.id!)">View Invoice</button>
+        </ng-container>
+        <ng-container *ngIf="reservation.status !== 'PAID'">
+          N/A
+        </ng-container>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #noReservations>
+  <p>No reservations found.</p>
+</ng-template>
+
+<!-- Ödeme Modalı -->
+<div class="payment-modal" *ngIf="showPaymentModal">
+  <div class="payment-modal-content">
+    <span class="close" (click)="closePaymentModal()">&times;</span>
+    <h2>Ödeme İşlemi</h2>
+    <p>Lütfen kart bilgilerinizi girin:</p>
+    <form (ngSubmit)="submitPayment()">
+      <div>
+        <label for="cardNumber">Kart Numarası:</label>
+        <input id="cardNumber" type="text" [(ngModel)]="cardNumber" name="cardNumber" required />
+      </div>
+      <div>
+        <label for="cardExpiry">Son Kullanma Tarihi (MM/YY):</label>
+        <input id="cardExpiry" type="text" [(ngModel)]="cardExpiry" name="cardExpiry" required />
+      </div>
+      <div>
+        <label for="cardCvv">CVV:</label>
+        <input id="cardCvv" type="text" [(ngModel)]="cardCvv" name="cardCvv" required />
+      </div>
+      <button type="submit">Pay Now</button>
+    </form>
+    <div class="error" *ngIf="paymentError">{{ paymentError }}</div>
+    <div class="success" *ngIf="paymentSuccessMessage">{{ paymentSuccessMessage }}</div>
   </div>
+</div>

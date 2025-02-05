@@ -18,7 +18,9 @@ import { UserService } from './_services/user.service';
 import { NgxPaginationModule } from 'ngx-pagination'; // Import the module
 import { ReservationService } from './_services/reservation.service'; // Servisi import edin
 import { CommonModule } from '@angular/common'; // CommonModule'ı import edin
-import { UserReservationsComponent } from './_services/user-reservations.component';  // Yeni bileşen
+import { UserReservationsComponent } from './_services/user-reservations.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // Yeni bileşen
+import { InvoiceComponent } from './_services/invoice.component';
 
 
 // Yönlendirme ayarları
@@ -29,7 +31,8 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },  // Dashboard sayfası
   { path: 'rooms', component: RoomListComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'admin-dashboard', component: AdminDashboardComponent},
+  { path: 'admin-dashboard', component: AdminDashboardComponent },
+   { path: 'invoice/:id', component: InvoiceComponent },
   { path: 'reservation', component: ReservationComponent },
   { path: 'admin-reservations', component: AdminReservationsComponent },
   { path: 'user-reservations', component: UserReservationsComponent }, // Yeni rota
@@ -49,7 +52,8 @@ const routes: Routes = [
     AdminDashboardComponent,
     RoomListComponent,
     ReservationComponent,
-    UserReservationsComponent
+    UserReservationsComponent,
+    InvoiceComponent
   ],
   imports: [
     BrowserModule,
@@ -57,10 +61,13 @@ const routes: Routes = [
     RouterModule.forRoot(routes),  
     FormsModule,
     NgxPaginationModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [RoomService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+
+  exports: [InvoiceComponent]
 })
 export class AppModule { }
 

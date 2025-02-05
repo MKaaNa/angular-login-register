@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Reservation } from '../models/reservation.model';
 import { ReservationService } from '../_services/reservation.service';
 import { AuthService } from '../_services/auth.service';
+import { PaymentService } from '../_services/payment.service';
+import { InvoiceService } from '../_services/invoice.service';
+import { Router } from '@angular/router';
+import { Invoice } from '../models/invoice.model';
 
 @Component({
   selector: 'app-user-reservations',
@@ -12,9 +16,21 @@ export class UserReservationsComponent implements OnInit {
   reservations: Reservation[] = [];
   errorMessage: string = '';
 
+  // Ödeme modalı değişkenleri
+  showPaymentModal: boolean = false;
+  selectedReservationId: number | null = null;
+  cardNumber: string = '';
+  cardExpiry: string = '';
+  cardCvv: string = '';
+  paymentError: string = '';
+  paymentSuccessMessage: string = '';
+
   constructor(
     private reservationService: ReservationService,
-    private authService: AuthService
+    private paymentService: PaymentService,
+    private invoiceService: InvoiceService,
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -22,43 +38,75 @@ export class UserReservationsComponent implements OnInit {
   }
 
   loadUserReservations(): void {
-    // Giriş yapan kullanıcının ID'sini alıyoruz (örneğin, sessionStorage veya AuthService üzerinden)
     const userId = Number(this.authService.getUserId());
-    console.log("User ID from AuthService:", userId, "Type:", typeof userId);
-
     this.reservationService.getAllReservations().subscribe(
       (allReservations: Reservation[]) => {
-        console.log("All Reservations:", allReservations);
-
-        // Her rezervasyonun user.id'sini ve durumunu loglayalım:
-        allReservations.forEach(r => {
-          if (r.user) {
-            console.log(`Reservation ID ${r.id}: User ID: ${r.user.id} (Type: ${typeof r.user.id}), Status: ${r.status}`);
-          } else {
-            console.log(`Reservation ID ${r.id}: User is undefined`);
-          }
-        });
-
-        // Filtreleme: Yalnızca giriş yapan kullanıcının rezervasyonlarını alıyoruz.
-        let userReservations = allReservations.filter((r: Reservation) => 
+        let userReservations = allReservations.filter((r: Reservation) =>
           r.user && Number(r.user.id) === userId
         );
-
-        // Sıralama: En yeni rezervasyon en üstte olacak şekilde sıralıyoruz.
-        // Eğer rezervasyon modelinizde bir 'created' veya 'createdAt' alanı varsa,
-        // onu kullanabilirsiniz. Yoksa, id'ye göre sıralama yapıyoruz.
-        userReservations.sort((a, b) => {
-          const idA = a.id || 0;
-          const idB = b.id || 0;
-          return idB - idA;
-        });
-        
+        userReservations.sort((a, b) => (b.id || 0) - (a.id || 0));
         this.reservations = userReservations;
-        console.log("Sorted Reservations (User's):", this.reservations);
       },
       (error: any) => {
         this.errorMessage = 'Failed to load reservations';
         console.error(error);
+      }
+    );
+  }
+
+  openPaymentModal(reservationId: number): void {
+    this.selectedReservationId = reservationId;
+    this.cardNumber = '';
+    this.cardExpiry = '';
+    this.cardCvv = '';
+    this.paymentError = '';
+    this.paymentSuccessMessage = '';
+    this.showPaymentModal = true;
+  }
+
+  closePaymentModal(): void {
+    this.showPaymentModal = false;
+    this.selectedReservationId = null;
+  }
+
+  submitPayment(): void {
+    if (!this.cardNumber || !this.cardExpiry || !this.cardCvv) {
+      this.paymentError = 'Lütfen tüm kart bilgilerini doldurun.';
+      return;
+    }
+    if (this.selectedReservationId == null) {
+      this.paymentError = 'Rezervasyon bilgisi eksik.';
+      return;
+    }
+    this.paymentService.payReservation(this.selectedReservationId).subscribe(
+      (invoice: Invoice) => {
+        this.paymentSuccessMessage = 'Ödemeniz başarıyla tamamlandı.';
+        this.loadUserReservations();
+        setTimeout(() => {
+          this.closePaymentModal();
+          this.router.navigate(['/invoice', invoice.reservationId]);
+        }, 2000);
+      },
+      (error) => {
+        console.error('Payment failed:', error);
+        this.paymentError = 'Ödeme işlemi başarısız. Lütfen tekrar deneyin.';
+      }
+    );
+  }
+
+  payReservation(reservationId: number): void {
+    this.openPaymentModal(reservationId);
+  }
+
+  viewInvoice(reservationId: number): void {
+    this.invoiceService.getInvoiceTxt(reservationId).subscribe(
+      (txtBlob) => {
+        const blobUrl = URL.createObjectURL(txtBlob);
+        window.open(blobUrl, '_blank');
+      },
+      (error) => {
+        console.error('Failed to fetch invoice TXT:', error);
+        this.errorMessage = 'Fatura görüntülenemedi. Lütfen tekrar deneyin.';
       }
     );
   }

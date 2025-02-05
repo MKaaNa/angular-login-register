@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ReservationService {
-  // Base URL'yi backend API'nize göre ayarlayın
   private baseUrl = 'http://localhost:8080/api/reservations';
 
   constructor(private http: HttpClient) { }

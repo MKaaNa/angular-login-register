@@ -1,7 +1,7 @@
 export interface ReservationHistory {
-  action: string;     // Örneğin, "Created", "Approved", "Cancelled", vb.
-  date: string;       // ISO formatında tarih
-  note?: string;      // Opsiyonel açıklama
+  action: string;     
+  date: string;       
+  note?: string;      
 }
 
 export interface Reservation {
@@ -21,5 +21,5 @@ export interface Reservation {
   totalPrice: number;
   status: string;
   adminNote?: string;
-  history?: ReservationHistory[];  // Rezervasyon işlemleri geçmişi
+  history?: ReservationHistory[];  
 }

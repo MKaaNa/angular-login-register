@@ -1,0 +1,13 @@
+<div class="invoice-container" *ngIf="invoiceText; else errorOrLoading">
+    <h2>Invoice</h2>
+    <pre>{{ invoiceText }}</pre>
+</div>
+
+<ng-template #errorOrLoading>
+    <div *ngIf="errorMessage; else loading">
+        <p class="error">{{ errorMessage }}</p>
+    </div>
+    <ng-template #loading>
+        <p>Fatura yükleniyor...</p>
+    </ng-template>
+</ng-template>

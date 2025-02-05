@@ -9,6 +9,7 @@ import {jwtDecode} from 'jwt-decode';
 })
 export class AuthService {
   private currentUser: { id: number; email: string; role: string } | null = null;
+  getUserInfo: any;
 
   setCurrentUser(user: { id: number; email: string; role: string }): void {
     this.currentUser = user;
