@@ -15,8 +15,8 @@ import { Reservation } from '../models/reservation.model';
 export class AdminDashboardComponent implements OnInit {
   users: any[] = [];
   rooms: any[] = [];
-  p: number = 1;
-  pRoom: number = 1;
+  pUser: number = 1;   
+  pRoom: number = 1; 
   reservations: Reservation[] = [];
   errorMessage: string = '';
   selectedReservation: Reservation | null = null;
@@ -27,6 +27,8 @@ export class AdminDashboardComponent implements OnInit {
   showAddRoomModal: boolean = false;
   showEditRoomModal: boolean = false;
   newRoom: any = { roomType: '', price: 0 };
+  
+
 
   // Pending rezervasyon sayısını tutan değişken
   pendingReservationsCount: number = 0;
@@ -36,7 +38,7 @@ export class AdminDashboardComponent implements OnInit {
     private reservationService: ReservationService,
     private userService: UserService,
     private authService: AuthService,
-    public router: Router, // Template'den erişilebilmesi için public
+    public router: Router, 
     private http: HttpClient
   ) {}
 
@@ -280,7 +282,7 @@ export class AdminDashboardComponent implements OnInit {
     );
   }
 
-  // Kullanıcı bilgilerini güncellemek için
+  // Kullanıcı bilgilerini güncellemek
   updateUser(): void {
     if (this.newUser.id) {
       this.userService.updateUser(this.newUser).subscribe(
@@ -298,7 +300,7 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  // Kullanıcıyı kaydetmek için
+  // Kullanıcıyı kaydetmek 
   saveUser(): void {
     if (this.newUser.id) {
       this.userService.updateUser(this.newUser).subscribe((updatedUser: any) => {
@@ -317,7 +319,7 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  // Toplam fiyat hesaplama metodu (örnek)
+  // Toplam fiyat hesaplama metodu 
   updateTotalPrice(): void {
     if (this.newRoom.roomType && this.newRoom.startDate && this.newRoom.endDate) {
       let dailyPrice = 0;
@@ -348,7 +350,7 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  // closeModal metodunu ekliyoruz
+  // closeModal 
   closeModal(): void {
     this.showAddUserModal = false;
     this.showEditUserModal = false;
@@ -356,7 +358,7 @@ export class AdminDashboardComponent implements OnInit {
     this.showEditRoomModal = false;
   }
 
-  // logout metodunu ekliyoruz
+  // logout 
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

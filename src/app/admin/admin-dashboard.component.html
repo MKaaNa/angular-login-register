@@ -1,12 +1,12 @@
 <div class="admin-dashboard">
   <h2>Admin Dashboard</h2>
 
-  <!-- Hoşgeldin mesajı -->
+  <!-- Hoşgeldin Mesajı -->
   <div class="welcome-message">
     Welcome, {{ 'Admin' }}!
   </div>
 
-  <!-- Kullanıcılar Tablosu -->
+  <!-- Kullanıcılar Tablosu (User Management) -->
   <div class="tab-content" [ngClass]="{ active: currentTab === 'userManagement' }">
     <h3>User Management</h3>
 
@@ -25,26 +25,26 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users | paginate: { itemsPerPage: 5, currentPage: p }">
+        <!-- Kullanıcılar paginate edilirken pUser değişkeni kullanılıyor -->
+        <tr *ngFor="let user of users | paginate: { itemsPerPage: 5, currentPage: pUser }">
           <td>{{ user.email }}</td>
           <td>{{ user.userRole }}</td>
           <td>
             <button (click)="editUser(user)">Edit</button>
-            <!-- Burada delete işleminden sonra loadUsers() çağırıyoruz -->
             <button (click)="deleteUser(user.id); loadUsers()">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <!-- Bildirim Alanı (örneğin, sağ üst köşede) -->
+    <!-- Bildirim Alanı (sağ üst köşede) -->
     <div class="notification" *ngIf="pendingReservationsCount > 0" 
          style="position: absolute; top: 10px; right: 10px; background-color: #ffc107; padding: 8px; border-radius: 4px;">
       You have {{ pendingReservationsCount }} new reservation request(s)!
     </div>
 
-    <!-- Sayfalama -->
-    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    <!-- Kullanıcılar için Sayfalama Kontrolleri (sadece sayfa numaraları) -->
+    <pagination-controls [directionLinks]="false" (pageChange)="pUser = $event"></pagination-controls>
   </div>
 
   <!-- Kullanıcı Ekleme Modalı -->
@@ -122,7 +122,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let room of rooms | paginate: { itemsPerPage: 5, currentPage: p }">
+        <!-- Odalar paginate edilirken pRoom değişkeni kullanılıyor -->
+        <tr *ngFor="let room of rooms | paginate: { itemsPerPage: 5, currentPage: pRoom }">
           <td>{{ room.roomType }}</td>
           <td>{{ room.price }}</td>
           <td>{{ room.startDate | date:'shortDate' }}</td>
@@ -162,45 +163,44 @@
       </div>
     </div>
 
-    <!-- Sayfalama -->
-    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    <!-- Oda Ekleme Modalı -->
+    <div class="modal" *ngIf="showAddRoomModal">
+      <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <h2>Add New Room</h2>
+        <form (ngSubmit)="addRoom()">
+          <label for="roomType">Room Type:</label>
+          <select id="roomType" [(ngModel)]="newRoom.roomType" name="roomType" required 
+                  (ngModelChange)="updateDefaultPrice(); updateTotalPrice()">
+            <option value="">-- Select Room Type --</option>
+            <option value="single">Single</option>
+            <option value="double">Double</option>
+            <option value="suite">Suite</option>
+          </select>
+          
+          <label for="guestCount">Guest Count:</label>
+          <input type="number" id="guestCount" [(ngModel)]="newRoom.guestCount" name="guestCount" required />
+
+          <label for="price">Price (Daily/Total):</label>
+          <input type="number" id="price" [(ngModel)]="newRoom.price" name="price" required />
+
+          <label for="startDate">Start Date:</label>
+          <input type="date" id="startDate" [(ngModel)]="newRoom.startDate" name="startDate" required 
+                 (ngModelChange)="updateTotalPrice()" />
+
+          <label for="endDate">End Date:</label>
+          <input type="date" id="endDate" [(ngModel)]="newRoom.endDate" name="endDate" required 
+                 (ngModelChange)="updateTotalPrice()" />
+
+          <button type="submit">Add Room</button>
+          <button type="button" (click)="closeModal()">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Odalar için Sayfalama Kontrolleri (sadece sayfa numaraları) -->
+    <pagination-controls [directionLinks]="false" (pageChange)="pRoom = $event"></pagination-controls>
   </div>
-
-  <!-- Oda Ekleme Modalı -->
-<div class="modal" *ngIf="showAddRoomModal">
-  <div class="modal-content">
-    <span class="close" (click)="closeModal()">&times;</span>
-    <h2>Add New Room</h2>
-    <form (ngSubmit)="addRoom()">
-      <label for="roomType">Room Type:</label>
-      <select id="roomType" [(ngModel)]="newRoom.roomType" name="roomType" required 
-              (ngModelChange)="updateDefaultPrice(); updateTotalPrice()">
-        <option value="">-- Select Room Type --</option>
-        <option value="single">Single</option>
-        <option value="double">Double</option>
-        <option value="suite">Suite</option>
-      </select>
-      
-      <label for="guestCount">Guest Count:</label>
-      <input type="number" id="guestCount" [(ngModel)]="newRoom.guestCount" name="guestCount" required />
-
-      <!-- Fiyat alanı admin tarafından düzenlenebilir fakat updateTotalPrice() bu alanı güncelleyecek -->
-      <label for="price">Price (Daily/Total):</label>
-      <input type="number" id="price" [(ngModel)]="newRoom.price" name="price" required />
-
-      <label for="startDate">Start Date:</label>
-      <input type="date" id="startDate" [(ngModel)]="newRoom.startDate" name="startDate" required 
-             (ngModelChange)="updateTotalPrice()" />
-
-      <label for="endDate">End Date:</label>
-      <input type="date" id="endDate" [(ngModel)]="newRoom.endDate" name="endDate" required 
-             (ngModelChange)="updateTotalPrice()" />
-
-      <button type="submit">Add Room</button>
-      <button type="button" (click)="closeModal()">Cancel</button>
-    </form>
-  </div>
-</div>
 
   <!-- Reservation Button for Admins -->
   <button class="btn-reservation" (click)="goToReservation()">Go to Reservation</button>
