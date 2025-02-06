@@ -22,15 +22,15 @@ export class InvoiceComponent implements OnInit {
       this.errorMessage = 'Geçersiz rezervasyon ID\'si.';
       return;
     }
-    this.invoiceService.getInvoiceTxt(reservationId).subscribe(
-      (blob) => {
+    this.invoiceService.getInvoicePdf(reservationId).subscribe(
+      (blob: Blob) => {
         const reader = new FileReader();
         reader.onload = () => {
           this.invoiceText = reader.result as string;
         };
         reader.readAsText(blob);
       },
-      (error) => {
+      (error: any) => {
         console.error('Invoice loading failed:', error);
         this.errorMessage = 'Fatura yüklenirken hata oluştu.';
       }

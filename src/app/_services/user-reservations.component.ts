@@ -84,6 +84,7 @@ export class UserReservationsComponent implements OnInit {
         this.loadUserReservations();
         setTimeout(() => {
           this.closePaymentModal();
+          // Ödeme sonrası faturayı PDF formatında görüntülemek için yönlendirme:
           this.router.navigate(['/invoice', invoice.reservationId]);
         }, 2000);
       },
@@ -97,17 +98,17 @@ export class UserReservationsComponent implements OnInit {
   payReservation(reservationId: number): void {
     this.openPaymentModal(reservationId);
   }
-
-  viewInvoice(reservationId: number): void {
-    this.invoiceService.getInvoiceTxt(reservationId).subscribe(
-      (txtBlob) => {
-        const blobUrl = URL.createObjectURL(txtBlob);
-        window.open(blobUrl, '_blank');
-      },
-      (error) => {
-        console.error('Failed to fetch invoice TXT:', error);
-        this.errorMessage = 'Fatura görüntülenemedi. Lütfen tekrar deneyin.';
-      }
-    );
-  }
+  
+viewInvoice(reservationId: number): void {
+  this.invoiceService.getInvoicePdf(reservationId).subscribe(
+    (pdfBlob: Blob) => {
+      const blobUrl = URL.createObjectURL(pdfBlob);
+      window.open(blobUrl, '_blank'); // PDF'yi yeni bir sekmede açar
+    },
+    (error) => {
+      console.error('Failed to fetch invoice PDF:', error);
+      this.errorMessage = 'Fatura görüntülenemedi. Lütfen tekrar deneyin.';
+    }
+  );
+}
 }

@@ -6,11 +6,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class InvoiceService {
-  private apiUrl = 'http://localhost:8080/api/reservations/invoice';
+  private apiUrl = 'http://localhost:8080/api/invoice';
 
   constructor(private http: HttpClient) {}
 
-  getInvoiceTxt(reservationId: number): Observable<Blob> {
+  getInvoicePdf(reservationId: number): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/${reservationId}`, { responseType: 'blob' });
   }
 }
